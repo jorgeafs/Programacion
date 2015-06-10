@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="39cm" height="19cm" viewBox="27 85 775 371" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffffff" x="201" y="87" width="102.25" height="28"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="201" y="87" width="102.25" height="28"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="252.125" y="107">Documento</text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="181.5" y="228.9" width="140.15" height="28"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="181.5" y="228.9" width="140.15" height="28"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="251.575" y="248.9">DocumentoImpl</text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="207.5" y="355.9" width="88.85" height="28"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="207.5" y="355.9" width="88.85" height="28"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="251.925" y="375.9">LibroImpl</text>
+  </g>
+  <g>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="251.575,276.143 251.575,314.4 251.925,314.4 251.925,354.893 "/>
+    <polygon style="fill: #ffffff" points="259.575,276.143 251.575,260.143 243.575,276.143 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="259.575,276.143 251.575,260.143 243.575,276.143 "/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="28.152" y="355.65" width="50.95" height="28"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="28.152" y="355.65" width="50.95" height="28"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="53.627" y="375.65">Libro</text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="562" y="86.65" width="71.6" height="28"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="562" y="86.65" width="71.6" height="28"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="597.8" y="106.65">Usuario</text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="542.5" y="228.55" width="109.5" height="28"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="542.5" y="228.55" width="109.5" height="28"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="597.25" y="248.55">UsuarioImpl</text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="542.5" y="355.55" width="109.35" height="28"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="542.5" y="355.55" width="109.35" height="28"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="597.175" y="375.55">AlumnoImpl</text>
+  </g>
+  <g>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="597.25,275.793 597.25,314.05 597.175,314.05 597.175,354.543 "/>
+    <polygon style="fill: #ffffff" points="605.25,275.793 597.25,259.793 589.25,275.793 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="605.25,275.793 597.25,259.793 589.25,275.793 "/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="729.152" y="356.3" width="71.45" height="28"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="729.152" y="356.3" width="71.45" height="28"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="764.877" y="376.3">Alumno</text>
+  </g>
+  <g>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="297.356,369.9 419.424,369.9 419.424,369.55 541.493,369.55 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="421.424" y="365.725"></text>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="301.356" y="365.9">0..5</text>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:end;font-family:monospace;font-style:normal;font-weight:normal" x="537.493" y="365.55">1..*</text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="187.652" y="425" width="86.6" height="28"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="187.652" y="425" width="86.6" height="28"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="230.952" y="445">Prestamo</text>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="366.152" y="424.9" width="124.5" height="28"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="366.152" y="424.9" width="124.5" height="28"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="428.402" y="444.9">PrestamoImpl</text>
+  </g>
+  <g>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 8; stroke: #000000" points="98.3445,369.65 151.301,369.65 151.301,369.9 206.494,369.9 "/>
+    <polygon style="fill: #ffffff" points="98.3445,361.65 82.3445,369.65 98.3445,377.65 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="98.3445,361.65 82.3445,369.65 98.3445,377.65 "/>
+  </g>
+  <g>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 8; stroke: #000000" points="252.125,134.243 252.125,179.95 251.575,179.95 251.575,227.893 "/>
+    <polygon style="fill: #ffffff" points="260.125,134.243 252.125,118.243 244.125,134.243 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="260.125,134.243 252.125,118.243 244.125,134.243 "/>
+  </g>
+  <g>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 8; stroke: #000000" points="597.8,133.893 597.8,179.6 597.25,179.6 597.25,227.543 "/>
+    <polygon style="fill: #ffffff" points="605.8,133.893 597.8,117.893 589.8,133.893 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="605.8,133.893 597.8,117.893 589.8,133.893 "/>
+  </g>
+  <g>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 8; stroke: #000000" points="709.907,370.3 682.5,370.3 682.5,369.55 652.857,369.55 "/>
+    <polygon style="fill: #ffffff" points="709.907,378.3 725.907,370.3 709.907,362.3 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="709.907,378.3 725.907,370.3 709.907,362.3 "/>
+  </g>
+  <g>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 8; stroke: #000000" points="293.493,439 328.201,439 328.201,438.9 365.144,438.9 "/>
+    <polygon style="fill: #ffffff" points="293.493,431 277.493,439 293.493,447 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="293.493,431 277.493,439 293.493,447 "/>
+  </g>
+  <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke-dasharray: 10; stroke: #000000" x1="429.652" y1="371" x2="428.678" y2="423.898"/>
+</svg>
