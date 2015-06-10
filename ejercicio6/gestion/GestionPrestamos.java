@@ -1,6 +1,15 @@
 package gestion;
-/**
- * 
+/** Funcionalidades:
+ * 		alumnosDevPendientes
+ * 		libroMasPrestado
+ * 		libroMasPrestadoHistorico
+ * 		libroMasPrestadoSituacion
+ * 		especialidadMasConsultada
+ * 		especialidadMasConsultadaHistorico
+ * 		especialidadMasConsultadaSituacion
+ * 		realizarPrestamo
+ * 		devolverPrestamo
+ * 		listarLibrosDisponibles
  */
 
 import java.io.*;
@@ -532,10 +541,11 @@ public class GestionPrestamos <T> {
 		ArrayList<PrestamoImpl> sinActualizar = null, actualizado = new ArrayList<PrestamoImpl>();
 
 		if(aModificar.get(0).getDiaDevolucion() == null) {  // se estan prestando los documentos
-			for (PrestamoImpl prestamoImpl : aModificar) {
+			/*for (PrestamoImpl prestamoImpl : aModificar) {
 				aux.escribirRegistroBinario(prestamoImpl, Constantes.PRESTAMOSITUACION);
 			}
-			devolver = true;
+			devolver = true;*/
+			aux.escribirMultiplesRegistroBinario(aModificar, Constantes.PRESTAMOSITUACION);
 		} else {											//se estan devolviendo
 			sinActualizar = aux.leerFicheroBinario(Constantes.PRESTAMOSITUACION);
 			for(int i = 0 ; i< aModificar.size(); i++, encontrado = false) {
@@ -549,9 +559,9 @@ public class GestionPrestamos <T> {
 			}
 			aux.borrarFicheroBinario(Constantes.PRESTAMOSITUACION);
 			aux.crearFicheroBinario(Constantes.PRESTAMOSITUACION);
-			for (PrestamoImpl prestamoImpl : actualizado) {
-				aux.escribirRegistroBinario(prestamoImpl, Constantes.PRESTAMOSITUACION);
-			}
+			//for (PrestamoImpl prestamoImpl : actualizado) {
+				aux.escribirMultiplesRegistroBinario(actualizado, Constantes.PRESTAMOSITUACION);
+			//}
 			devolver = true;
 		}
 		return devolver;

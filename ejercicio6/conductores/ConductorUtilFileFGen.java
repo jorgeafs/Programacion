@@ -4,7 +4,7 @@ import java.time.*;
 import java.util.ArrayList;
 
 import datos.*;
-import utilidad.*;
+import utilidad.UtilFileGen;
 
 public class ConductorUtilFileFGen {
 

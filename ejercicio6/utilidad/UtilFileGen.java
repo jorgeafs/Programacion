@@ -13,6 +13,7 @@ package utilidad;
  * 		public boolean copiarFicheroBinario(String ficheroOrigen, String ficheroCopia)
  * 		public boolean copiarFicheroTexto(String ficheroOrigen, String ficheroCopia)
  * 		public boolean escribirRegistroBinario(T introducir, String ficheroIntroducir)
+ * 		public boolean escribirMultiplesRegistroBinario(ArrayList<T> introducir, String ficheroIntroducir)
  * 		public boolean escribirRegistroTexto(String introducir, String ficheroIntroducir)
  * 		public  ArrayList<T> leerFicheroBinario (String ruta)
  * 		public  ArrayList<T> leerFicheroTexto (String ruta)
@@ -318,6 +319,44 @@ public class UtilFileGen<T> implements Serializable{
 		return devolver;		
 	}
 	
+	/**Interfaz escribirMultiplesRegistroBinario
+	 * Cabecera: public boolean escribirMultiplesRegistroBinario(ArrayList<T> introducir, String ficheroIntroducir)
+	 * Comentario: Dado un ArrayList<T> introducir y un String que contienen la ruta del archivo en el que queremos escribir los objetos; true si se escribio correctamente
+	 * y false en caso contrario o error
+	 * error 
+	 * Precondiciones: Ninguna
+	 * Entrada: un String y un UtilidadesFichero<Object>
+	 * Salida: un boolean
+	 * Postcondiciones: devuelve un boolean como true si se escribio bien y false en caso contrario o error 
+	*/
+	//probando a escribir objetos puros
+	public boolean escribirMultiplesRegistroBinario(ArrayList<T> introducir, String ficheroIntroducir) {
+		boolean devolver= false;
+		FileOutputStream fosEscribir = null;
+		ObjectOutputStream oosEscribir = null;
+		
+		if (new File(ficheroIntroducir+".dat").isFile()){
+			try{
+				fosEscribir = new FileOutputStream(ficheroIntroducir+".dat",true);
+				oosEscribir = new MiObjectOutputStream(fosEscribir);
+				for (T t : introducir) {
+					oosEscribir.writeObject(t);
+				}
+				devolver = true;
+			}catch (IOException e) {
+				//e.printStackTrace();
+				System.out.println("No se pudo escribir");
+			} finally{
+				try {
+					if(fosEscribir != null){ fosEscribir.close();}
+					if(oosEscribir != null){ oosEscribir.close();}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		} 
+		return devolver;		
+	}
 	/**Interfaz escribirRegistroTexto
 	 * Cabecera: public boolean escribirRegistroTexto(UtilidadesFichero<Object> introducir, String ficheroIntroducir)
 	 * Comentario: Dado un T introducir y un String que contienen la ruta del archivo en el que queremos escribir el String; true si se escribio correctamente
