@@ -1,15 +1,31 @@
 package gestion;
 /** Funcionalidades:
- * 		alumnosDevPendientes
- * 		libroMasPrestado
- * 		libroMasPrestadoHistorico
- * 		libroMasPrestadoSituacion
- * 		especialidadMasConsultada
- * 		especialidadMasConsultadaHistorico
- * 		especialidadMasConsultadaSituacion
- * 		realizarPrestamo
- * 		devolverPrestamo
- * 		listarLibrosDisponibles
+ * 		Publicas:
+ * 			public ArrayList<AlumnoImpl> alumnosDevPendientes (String rutaAlu)
+ * 			public ArrayList<LibroImpl> libroMasPrestado(String rutaLibros)
+ * 			public ArrayList<LibroImpl> libroMasPrestadoHistorico(String rutaLibros) 
+ * 			public ArrayList<LibroImpl> libroMasPrestadoSituacion(String rutaLibros)
+ * 			public ArrayList<String> especialidadMasConsultada(String rutaLibros) 
+ * 			public ArrayList<String> especialidadMasConsultadaHistorico()
+ * 			public ArrayList<String> especialidadMasConsultadaSituacion()
+ * 			public ArrayList<PrestamoImpl> realizarPrestamo(ArrayList<PrestamoImpl> aInsertar, String rutaUsuarioSubClase, String rutaDocumentoSubClase) 
+ * 			public boolean devolverPrestamo(ArrayList<PrestamoImpl> aDevolver, String rutaUsuarioSubClase, String rutaDocumentoSubClase)
+ * 			public int identificarAlumno(String nombre, String apellido1, String apellido2, String rutaUsuarioSubClase)
+ * 			public boolean listarLibrosDisponibles(String rutaDocumentoSubClase)
+ * 		Privadas:
+ * 			private ArrayList<T> eliminarRepetidos(ArrayList<T> elimina)
+ * 			private void actualizarNumeroPrestamos(UsuarioImpl usu, int size, String rutaUsuarioSubClase)
+ * 			private boolean sePuedePrestar(int codigoDocumento, String rutaDocumentoSubClase)
+ * 			private boolean cumpleRestriccion(int codigoUsuario, String rutaUsuarioSubClase)
+ * 			private boolean quedanEjemplares(int codigoDocumento, String rutaDocumentoSubClase)
+ * 			private boolean noPenalizado(int codigoUsuario, String rutaUsuarioSubClase)
+ * 			private boolean esUnicoUsuario(ArrayList<PrestamoImpl> aInsertar)
+ * 			private void penalizar(ArrayList<PrestamoImpl> aDevolver, String rutaUsuarioSubClase, String rutaDocumentoSubClase)
+ * 			private int multiplicadorTipoPrestamo(PrestamoImpl prestamoImpl, String rutaDocumentoSubClase)
+ * 			private int diasRetraso(PrestamoImpl prestamoImpl, String rutaDocumentoSubClase)
+ * 			private boolean modificar(ArrayList<PrestamoImpl> aModificar)
+ * 			private boolean fueraPlazo(PrestamoImpl aDevolver, String rutaDocumentoSubClase)
+ * 			private void pulseCualquierTeclaParaContinuar()
  */
 
 import java.io.*;
@@ -203,7 +219,7 @@ public class GestionPrestamos <T> {
 	}
 	
 	/**Interfaz: especialidadMasConsultadaHistorico
-	 * Cabecera: public ArrayList<String> especialidadMasConsultadaHistorico(String rutaLibros)
+	 * Cabecera: public ArrayList<String> especialidadMasConsultadaHistorico()
 	 * Comentario: Dada la ruta al fichero de libros, devuelve un ArrayList con las especialidades mas consultados, del prestamo historico. Devolvera null en caso de error.
 	 * Precondiciones: ninguna
 	 * Entradas: un String
@@ -234,7 +250,7 @@ public class GestionPrestamos <T> {
 	}
 	
 	/**Interfaz: especialidadMasConsultadaSituacion
-	 * Cabecera: public ArrayList<String> especialidadMasConsultadaSituacion(String rutaLibros)
+	 * Cabecera: public ArrayList<String> especialidadMasConsultadaSituacion()
 	 * Comentario: Dada la ruta al fichero de libros, devuelve un ArrayList con las especialidades mas consultados, del prestamo situacion. Devolvera null en caso de error.
 	 * Precondiciones: ninguna
 	 * Entradas: un String
