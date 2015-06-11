@@ -85,6 +85,7 @@ public class LibroImpl extends DocumentoImpl implements Libro {
 	public void setIsbn(long nuevoISBN) {
 		this.isbn = nuevoISBN;
 	}
+	
 	public String toString() {
 		return super.toString().replaceAll("\\)", "")+";"+this.getTitulo()+";"+this.getAutor()+";"+this.getEditorial()+";"+this.getEdicion()+
 				";"+this.getReimpresion()+";"+this.getIsbn()+")";

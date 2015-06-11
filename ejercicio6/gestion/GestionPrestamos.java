@@ -5,7 +5,7 @@ package gestion;
  * 			public ArrayList<LibroImpl> libroMasPrestado(String rutaLibros)
  * 			public ArrayList<LibroImpl> libroMasPrestadoHistorico(String rutaLibros) 
  * 			public ArrayList<LibroImpl> libroMasPrestadoSituacion(String rutaLibros)
- * 			public ArrayList<String> especialidadMasConsultada(String rutaLibros) 
+ * 			public ArrayList<String> especialidadMasConsultada() 
  * 			public ArrayList<String> especialidadMasConsultadaHistorico()
  * 			public ArrayList<String> especialidadMasConsultadaSituacion()
  * 			public ArrayList<PrestamoImpl> realizarPrestamo(ArrayList<PrestamoImpl> aInsertar, String rutaUsuarioSubClase, String rutaDocumentoSubClase) 
@@ -14,11 +14,13 @@ package gestion;
  * 			public boolean listarLibrosDisponibles(String rutaDocumentoSubClase)
  * 		Privadas:
  * 			private ArrayList<T> eliminarRepetidos(ArrayList<T> elimina)
+ * 			private int contarEspecialidad(String ficheroPrestamo)
  * 			private void actualizarNumeroPrestamos(UsuarioImpl usu, int size, String rutaUsuarioSubClase)
  * 			private boolean sePuedePrestar(int codigoDocumento, String rutaDocumentoSubClase)
  * 			private boolean cumpleRestriccion(int codigoUsuario, String rutaUsuarioSubClase)
  * 			private boolean quedanEjemplares(int codigoDocumento, String rutaDocumentoSubClase)
  * 			private boolean noPenalizado(int codigoUsuario, String rutaUsuarioSubClase)
+ * 			private void despenalizado(String codigoUsuario, String rutaUsuarioSubClase)
  * 			private boolean esUnicoUsuario(ArrayList<PrestamoImpl> aInsertar)
  * 			private void penalizar(ArrayList<PrestamoImpl> aDevolver, String rutaUsuarioSubClase, String rutaDocumentoSubClase)
  * 			private int multiplicadorTipoPrestamo(PrestamoImpl prestamoImpl, String rutaDocumentoSubClase)
@@ -30,6 +32,7 @@ package gestion;
 
 import java.io.*;
 import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import datos.*;
@@ -104,23 +107,42 @@ public class GestionPrestamos <T> {
 	 * Salidas: un ArrayList
 	 * Postcondiciones: Devuelve un ArrayList con los libros mas prestados, devolvera null en caso de error.
 	 */
-	public ArrayList<LibroImpl> libroMasPrestado(String rutaLibros) {
+	public ArrayList<LibroImpl> libroMasPrestado() {
 		ArrayList<LibroImpl> devolver = null, situacion = new ArrayList<LibroImpl>(), historico = new ArrayList<LibroImpl>();
+		boolean repetidos = false;
+		int histnum = 0, sitnum = 0;
 		
-		situacion = new GestionPrestamos<LibroImpl>().libroMasPrestadoSituacion(rutaLibros);		
-		historico = new GestionPrestamos<LibroImpl>().libroMasPrestadoHistorico(rutaLibros);
-		if (!situacion.isEmpty()) {
+		situacion = new GestionPrestamos<String>().libroMasPrestadoSituacion();		
+		historico = new GestionPrestamos<String>().libroMasPrestadoHistorico();
+		histnum = new GestionPrestamos<T>().contarLibro(Constantes.PRESTAMOHISTORICO);
+		sitnum = new GestionPrestamos<T>().contarLibro(Constantes.PRESTAMOSITUACION);
+		if(historico != null  && situacion != null){
 			devolver = new ArrayList<LibroImpl>();
-			devolver.addAll(situacion);
-		}
-		if(!historico.isEmpty() && devolver != null) {
-			devolver.addAll(historico);
-		} else if (!historico.isEmpty() && devolver == null){
-			devolver = new ArrayList<LibroImpl>();
-			devolver.addAll(historico);
-		}
-		if (!devolver.isEmpty()){
-			devolver = new GestionPrestamos<LibroImpl>().eliminarRepetidos(devolver);
+			if(histnum == 0 || sitnum == 0) {
+				if(histnum != 0) {
+					devolver.addAll(historico);	
+				} else {
+					devolver.addAll(situacion);
+				}
+			} else {
+				for (int i = 0; i < historico.size(); i++) { //busca si existen especialidades en ambos arrays
+					if(Collections.frequency(situacion,historico.get(i))>0 && historico.get(i)!=null) {
+						devolver.add(historico.get(i));
+						if(!repetidos) {
+							repetidos = true;
+						}
+					}
+				
+				}
+				if(!repetidos) {
+					if(histnum>sitnum){
+						devolver.addAll(historico);	
+					} else {
+						devolver.addAll(situacion);
+					}
+				}
+			}
+			devolver.trimToSize();
 		}
 		return devolver;
 	}
@@ -133,22 +155,21 @@ public class GestionPrestamos <T> {
 	 * Salidas: un ArrayList
 	 * Postcondiciones: Devuelve un ArrayList con los libros, del prestamo historico, mas prestados, devolvera null en caso de error.
 	 */
-	public ArrayList<LibroImpl> libroMasPrestadoHistorico(String rutaLibros) {
-		ArrayList<Object> aux = new UtilFileGen<Object>().leerFicheroBinario(rutaLibros);
-		ArrayList<PrestamoImpl> auxPrest = new UtilFileGen<PrestamoImpl>().leerFicheroBinario(Constantes.PRESTAMOHSITORICO);
-		ArrayList<LibroImpl> devolver = null; 
+	public ArrayList<LibroImpl> libroMasPrestadoHistorico() {
+		ArrayList<LibroImpl> devolver = null, aux = new UtilFileGen<LibroImpl>().leerFicheroBinario(Constantes.LIBROS);
+		ArrayList<PrestamoImpl> auxPrest = new UtilFileGen<PrestamoImpl>().leerFicheroBinario(Constantes.PRESTAMOHISTORICO);
 		int contador = 0;
 		
-		if(!auxPrest.isEmpty() && !aux.isEmpty() && aux.get(0) instanceof LibroImpl) {
+		if(!auxPrest.isEmpty() && !aux.isEmpty()) {
 			devolver = new ArrayList<LibroImpl>();
 			contador = Collections.frequency(auxPrest, auxPrest.get(0));
-			devolver.add(new UtilFileGen<LibroImpl>().busqueda(auxPrest.get(0).toString(), rutaLibros).get(0));
+			devolver.add(aux.get(0));
 			for(int i=1 ; i < auxPrest.size(); i++) {
 				if(contador == Collections.frequency(auxPrest, auxPrest.get(i))) {
-					devolver.add(new UtilFileGen<LibroImpl>().busqueda(auxPrest.get(0).toString(), rutaLibros).get(i));
+					devolver.add(buscarLibro(aux, auxPrest.get(0).getCodigoDocumento()));
 				} else if (contador < Collections.frequency(auxPrest, auxPrest.get(i))) {
 					devolver.removeAll(devolver);
-					devolver.add(new UtilFileGen<LibroImpl>().busqueda(auxPrest.get(0).toString(), rutaLibros).get(i));
+					devolver.add(buscarLibro(aux, auxPrest.get(0).getCodigoDocumento()));
 					contador = Collections.frequency(auxPrest, auxPrest.get(i));
 				}
 			}
@@ -165,22 +186,21 @@ public class GestionPrestamos <T> {
 	 * Salidas: un ArrayList
 	 * Postcondiciones: Devuelve un ArrayList con los libros, del prestamo situacion, mas prestados, devolvera null en caso de error.
 	 */
-	public ArrayList<LibroImpl> libroMasPrestadoSituacion(String rutaLibros) {
-		ArrayList<Object> aux = new UtilFileGen<Object>().leerFicheroBinario(rutaLibros);
+	public ArrayList<LibroImpl> libroMasPrestadoSituacion() {
+		ArrayList<LibroImpl> devolver = null, aux = new UtilFileGen<LibroImpl>().leerFicheroBinario(Constantes.LIBROS);
 		ArrayList<PrestamoImpl> auxPrest = new UtilFileGen<PrestamoImpl>().leerFicheroBinario(Constantes.PRESTAMOSITUACION);
-		ArrayList<LibroImpl> devolver = null; 
 		int contador = 0;
 		
-		if(!auxPrest.isEmpty() && !aux.isEmpty() && aux.get(0) instanceof LibroImpl) {
+		if(!auxPrest.isEmpty() && !aux.isEmpty()) {
 			devolver = new ArrayList<LibroImpl>();
 			contador = Collections.frequency(auxPrest, auxPrest.get(0));
-			devolver.add(new UtilFileGen<LibroImpl>().busqueda(auxPrest.get(0).toString(), rutaLibros).get(0));
+			devolver.add(aux.get(0));
 			for(int i=1 ; i < auxPrest.size(); i++) {
 				if(contador == Collections.frequency(auxPrest, auxPrest.get(i))) {
-					devolver.add(new UtilFileGen<LibroImpl>().busqueda(auxPrest.get(0).toString(), rutaLibros).get(i));
+					devolver.add(buscarLibro(aux, auxPrest.get(0).getCodigoDocumento()));
 				} else if (contador < Collections.frequency(auxPrest, auxPrest.get(i))) {
 					devolver.removeAll(devolver);
-					devolver.add(new UtilFileGen<LibroImpl>().busqueda(auxPrest.get(0).toString(), rutaLibros).get(i));
+					devolver.add(buscarLibro(aux, auxPrest.get(0).getCodigoDocumento()));
 					contador = Collections.frequency(auxPrest, auxPrest.get(i));
 				}
 			}
@@ -189,31 +209,92 @@ public class GestionPrestamos <T> {
 		return devolver;
 	}
 	
+	private LibroImpl buscarLibro(ArrayList<LibroImpl> aux, int codigoDocumento) {
+		int indice;
+		boolean encontrado = false;
+		
+		for(int i = 0; i<aux.size() || !encontrado ;i++){
+			if(codigoDocumento == aux.get(i).getCodigo()) {
+				indice = i;
+				encontrado = true;
+			}
+		}
+		
+		return null;
+	}
+
+	/**Interfaz: contarEspecialidad
+	 * Cabecera: private String contarEspecialidad(String ficheroPrestamo)
+	 * Comentario: Dada la ruta a el fichero de prestamos, devuelve cuantas veces se repiten las especialidad/es mas consultadas o 0 en caso de error
+	 * Precondiciones: ninguna
+	 * Entradas: un String
+	 * Salidas: un String
+	 * Postcondiciones: Devuelve cuantas veces se repiten las especialidad/es mas consultadas o 0 en caso de error
+	 */
+	private int contarLibro(String ficheroPrestamo) {
+		int devolver = 0, contador;
+		ArrayList<PrestamoImpl> auxPrest  = new UtilFileGen<PrestamoImpl>().leerFicheroBinario(ficheroPrestamo);
+		ArrayList<Integer> auxInt = new ArrayList<Integer>();
+	
+		if(!auxPrest.isEmpty()) {
+			for(PrestamoImpl aux : auxPrest){
+				auxInt.add(aux.getCodigoDocumento());
+			}
+			contador = Collections.frequency(auxInt, auxInt.get(0));
+			for(int i=1 ; i < auxPrest.size(); i++) {
+				if (contador < Collections.frequency(auxInt, auxInt.get(i))) {
+					contador = Collections.frequency(auxInt, auxInt.get(i));
+				}
+			}
+			devolver = contador;
+		}
+		return devolver;
+	}
+
 	/**Interfaz: especialidadMasConsultada
-	 * Cabecera: public ArrayList<String> especialidadMasConsultada(String rutaLibros)
-	 * Comentario: Dada la ruta al fichero de libros, devuelve un ArrayList con las especialidades mas consultados. Devolvera null en caso de error.
+	 * Cabecera: public ArrayList<String> especialidadMasConsultada()
+	 * Comentario: Devuelve un ArrayList con las especialidades mas consultados. Devolvera null en caso de error.
 	 * Precondiciones: ninguna
 	 * Entradas: un String
 	 * Salidas: un ArrayList
 	 * Postcondiciones: Devuelve un ArrayList con las especialidades mas consultados, devolvera null en caso de error.
 	 */
-	public ArrayList<String> especialidadMasConsultada(String rutaLibros) {
+	public ArrayList<String> especialidadMasConsultada() {
 		ArrayList<String> devolver = null, situacion = new ArrayList<String>(), historico = new ArrayList<String>();
+		boolean repetidos = false;
+		int histnum = 0, sitnum = 0;
 		
 		situacion = new GestionPrestamos<String>().especialidadMasConsultadaSituacion();		
 		historico = new GestionPrestamos<String>().especialidadMasConsultadaHistorico();
-		if (!situacion.isEmpty()) {
+		histnum = new GestionPrestamos<T>().contarEspecialidad(Constantes.PRESTAMOHISTORICO);
+		sitnum = new GestionPrestamos<T>().contarEspecialidad(Constantes.PRESTAMOSITUACION);
+		if(historico != null  && situacion != null){
 			devolver = new ArrayList<String>();
-			devolver.addAll(situacion);
-		}
-		if(!historico.isEmpty() && devolver != null) {
-			devolver.addAll(historico);
-		} else if (!historico.isEmpty() && devolver == null){
-			devolver = new ArrayList<String>();
-			devolver.addAll(historico);
-		}
-		if (!devolver.isEmpty()){
-			devolver = new GestionPrestamos<String>().eliminarRepetidos(devolver);
+			if(histnum == 0 || sitnum == 0) {
+				if(histnum != 0) {
+					devolver.addAll(historico);	
+				} else {
+					devolver.addAll(situacion);
+				}
+			} else {
+				for (int i = 0; i < historico.size(); i++) { //busca si existen especialidades en ambos arrays
+					if(Collections.frequency(situacion,historico.get(i))>0) {
+						devolver.add(historico.get(i));
+						if(!repetidos) {
+							repetidos = true;
+						}
+					}
+				if(!repetidos) {
+					if(histnum>sitnum){
+						devolver.addAll(historico);	
+					} else {
+						devolver.addAll(situacion);
+					}
+				}
+					
+				}
+			}
+			devolver.trimToSize();
 		}
 		return devolver;
 	}
@@ -228,23 +309,25 @@ public class GestionPrestamos <T> {
 	 */
 	public ArrayList<String> especialidadMasConsultadaHistorico() {
 		ArrayList<String> devolver = null;
-		ArrayList<PrestamoImpl> auxPrest  = new UtilFileGen<PrestamoImpl>().leerFicheroBinario(Constantes.PRESTAMOHSITORICO);
+		ArrayList<PrestamoImpl> auxPrest  = new UtilFileGen<PrestamoImpl>().leerFicheroBinario(Constantes.PRESTAMOHISTORICO);
 		int contador = 0;
 		
-		if(!auxPrest.isEmpty()) {
-			devolver = new ArrayList<String>();
-			devolver.add(auxPrest.get(0).getEspecialidad());
-			contador = Collections.frequency(auxPrest, auxPrest.get(0));
-			for(int i=1 ; i < auxPrest.size(); i++) {
-				if(contador == Collections.frequency(auxPrest, auxPrest.get(i))) {
-					devolver.add(auxPrest.get(0).getEspecialidad());
-				} else if (contador < Collections.frequency(auxPrest, auxPrest.get(i))) {
-					devolver.removeAll(devolver);
-					devolver.add(auxPrest.get(0).getEspecialidad());
-					contador = Collections.frequency(auxPrest, auxPrest.get(i));
+		if(auxPrest != null) {
+			if	(!auxPrest.isEmpty()) {
+				devolver = new ArrayList<String>();
+				devolver.add(auxPrest.get(0).getEspecialidad());
+				contador = Collections.frequency(auxPrest, auxPrest.get(0));
+				for(int i=1 ; i < auxPrest.size(); i++) {
+					if(contador == Collections.frequency(auxPrest, auxPrest.get(i))) {
+						devolver.add(auxPrest.get(0).getEspecialidad());
+					} else if (contador < Collections.frequency(auxPrest, auxPrest.get(i))) {
+						devolver.removeAll(devolver);
+						devolver.add(auxPrest.get(0).getEspecialidad());
+						contador = Collections.frequency(auxPrest, auxPrest.get(i));
+					}
 				}
+				devolver = new GestionPrestamos<String>().eliminarRepetidos(devolver);
 			}
-			devolver = new GestionPrestamos<String>().eliminarRepetidos(devolver);
 		}
 		return devolver;
 	}
@@ -262,20 +345,50 @@ public class GestionPrestamos <T> {
 		ArrayList<PrestamoImpl> auxPrest  = new UtilFileGen<PrestamoImpl>().leerFicheroBinario(Constantes.PRESTAMOSITUACION);
 		int contador = 0;
 		
+		if(auxPrest != null) {
+			if(!auxPrest.isEmpty()) {
+				devolver = new ArrayList<String>();
+				devolver.add(auxPrest.get(0).getEspecialidad());
+				contador = Collections.frequency(auxPrest, auxPrest.get(0));
+				for(int i=1 ; i < auxPrest.size(); i++) {
+					if(contador == Collections.frequency(auxPrest, auxPrest.get(i))) {
+						devolver.add(auxPrest.get(0).getEspecialidad());
+					} else if (contador < Collections.frequency(auxPrest, auxPrest.get(i))) {
+						devolver.removeAll(devolver);
+						devolver.add(auxPrest.get(0).getEspecialidad());
+						contador = Collections.frequency(auxPrest, auxPrest.get(i));
+					}
+				}
+				devolver = new GestionPrestamos<String>().eliminarRepetidos(devolver);
+			}
+		}
+		return devolver;
+	}
+	
+	/**Interfaz: contarEspecialidad
+	 * Cabecera: private String contarEspecialidad(String ficheroPrestamo)
+	 * Comentario: Dada la ruta a el fichero de prestamos, devuelve cuantas veces se repiten las especialidad/es mas consultadas o 0 en caso de error
+	 * Precondiciones: ninguna
+	 * Entradas: un String
+	 * Salidas: un String
+	 * Postcondiciones: Devuelve cuantas veces se repiten las especialidad/es mas consultadas o 0 en caso de error
+	 */
+	private int contarEspecialidad(String ficheroPrestamo) {
+		int devolver = 0, contador;
+		ArrayList<PrestamoImpl> auxPrest  = new UtilFileGen<PrestamoImpl>().leerFicheroBinario(ficheroPrestamo);
+		ArrayList<String> auxString = new ArrayList<String>();
+	
 		if(!auxPrest.isEmpty()) {
-			devolver = new ArrayList<String>();
-			devolver.add(auxPrest.get(0).getEspecialidad());
-			contador = Collections.frequency(auxPrest, auxPrest.get(0));
+			for(PrestamoImpl aux : auxPrest){
+				auxString.add(aux.getEspecialidad());
+			}
+			contador = Collections.frequency(auxString, auxString.get(0));
 			for(int i=1 ; i < auxPrest.size(); i++) {
-				if(contador == Collections.frequency(auxPrest, auxPrest.get(i))) {
-					devolver.add(auxPrest.get(0).getEspecialidad());
-				} else if (contador < Collections.frequency(auxPrest, auxPrest.get(i))) {
-					devolver.removeAll(devolver);
-					devolver.add(auxPrest.get(0).getEspecialidad());
-					contador = Collections.frequency(auxPrest, auxPrest.get(i));
+				if (contador < Collections.frequency(auxString, auxString.get(i))) {
+					contador = Collections.frequency(auxString, auxString.get(i));
 				}
 			}
-			devolver = new GestionPrestamos<String>().eliminarRepetidos(devolver);
+			devolver = contador;
 		}
 		return devolver;
 	}
@@ -296,7 +409,7 @@ public class GestionPrestamos <T> {
 		UsuarioImpl aux = new UsuarioImpl();
 		UtilFileGen<UsuarioImpl> auxUsu = new UtilFileGen<UsuarioImpl>();
 		
-		devolver.addAll(aInsertar);
+		devolver.addAll(aInsertar); 
 		if(aInsertar != null && !aInsertar.isEmpty() && esUnicoUsuario(aInsertar) && noPenalizado(aInsertar.get(0).getCodigoUsuario(),rutaUsuarioSubClase) 
 				&& cumpleRestriccion(aInsertar.get(0).getCodigoUsuario(),rutaUsuarioSubClase)) {
 			for(int i = 0; i<aInsertar.size(); i++) {
@@ -305,9 +418,11 @@ public class GestionPrestamos <T> {
 					auxiliar.add(aInsertar.get(i));
 				}
 			}
-			aux = auxUsu.busqueda(aux.toString(), rutaUsuarioSubClase).get(0);
+			aux = auxUsu.busqueda("("+aInsertar.get(0).getCodigoUsuario(), rutaUsuarioSubClase).get(0);
 			if(!auxiliar.isEmpty() && (aux.getNumeroMaximoPrestamos()>(aux.getNumeroPrestamos()+auxiliar.size()))) { 
-				devolver.remove(auxiliar);
+				for(int i = 0; i<auxiliar.size();i++) {
+					devolver.remove(auxiliar.get(i));
+				}
 				actualizarNumeroPrestamos(aux, auxiliar.size(), rutaUsuarioSubClase);
 				modificar(auxiliar);
 			}
@@ -325,13 +440,19 @@ public class GestionPrestamos <T> {
 	 */	
 	private void actualizarNumeroPrestamos(UsuarioImpl usu, int size, String rutaUsuarioSubClase) {
 		UtilFileGen<UsuarioImpl> aux = new UtilFileGen<UsuarioImpl>();
-		String codigo = "("+usu.getCodigo();
-		ArrayList <UsuarioImpl> auxAlum = new UtilFileGen<UsuarioImpl>().busqueda(codigo, rutaUsuarioSubClase);
-		auxAlum.remove(usu);
+		ArrayList <UsuarioImpl> auxAlum = new UtilFileGen<UsuarioImpl>().leerFicheroBinario(rutaUsuarioSubClase), auxiliar = new ArrayList<UsuarioImpl>();
 		usu.setNumeroPrestamos(size);
-		auxAlum.add(usu);
+		
+		for(int i = 0 ; i < auxAlum.size(); i++){
+			if(usu.getCodigo()==auxAlum.get(i).getCodigo()){
+				auxiliar.add(usu);
+			} else {
+				auxiliar.add(auxAlum.get(i));
+			}			
+		}
 		aux.borrarFicheroBinario(rutaUsuarioSubClase);
 		aux.crearFicheroBinario(rutaUsuarioSubClase);
+		aux.escribirMultiplesRegistroBinario(auxAlum, rutaUsuarioSubClase);
 	}
 
 	/**Interfaz: sePuedePrestar
@@ -348,7 +469,7 @@ public class GestionPrestamos <T> {
 		String codigo = "("+codigoDocumento;
 		DocumentoImpl aux = new UtilFileGen<DocumentoImpl>().busqueda(codigo, rutaDocumentoSubClase).get(0);
 		
-		if(aux != null && aux.getTipoPrestamo() > 0) {
+		if(aux != null && aux.getTipoPrestamo() > Constantes.SOLOCONSULTA) {
 			devolver = true;
 		}
 		return devolver;
@@ -369,7 +490,7 @@ public class GestionPrestamos <T> {
 		UsuarioImpl aux = new UsuarioImpl();
 		ArrayList<Object> apoyo = new UtilFileGen<Object>().busqueda(codigo, rutaUsuarioSubClase);
 		
-		if(apoyo!= null && apoyo.size() == 1 && apoyo.get(0) instanceof UsuarioImpl){
+		if(apoyo!= null && apoyo.get(0) instanceof UsuarioImpl){
 			aux = (UsuarioImpl) apoyo.get(0);
 			if(aux.getNumeroPrestamos()<aux.getNumeroMaximoPrestamos()) {
 				devolver = true;
@@ -412,16 +533,44 @@ public class GestionPrestamos <T> {
 		ArrayList<Object> auxAlu = new UtilFileGen<Object>().busqueda(codigo, rutaUsuarioSubClase);
 		LocalDate hoy = LocalDate.now();
 		UsuarioImpl apoyo = new UsuarioImpl();
-		
-		if(auxAlu != null && auxAlu.size()==1 && auxAlu.get(0) instanceof UsuarioImpl) {
+
+
+		if(auxAlu != null && auxAlu.get(0) instanceof UsuarioImpl) {
 			apoyo=(UsuarioImpl) auxAlu.get(0);
 			if(apoyo.getInicioSuspension() == null || hoy.isAfter(apoyo.getInicioSuspension().plusDays(apoyo.getPeriodoSuspension()))) {
 				devolver = true;
+				despenalizado( codigo, rutaUsuarioSubClase);
 			}
 		}
 		return devolver;
 	}
 	
+	/**Interfaz: despenalizado
+	 * Cabecera: private void despenalizado(int codigoUsuario)
+	 * Comentario: Dado el codigo de un usuario se le busca en el fichero cuya ruta se nos pasa para despenalizarlo
+	 * Precondiciones: ninguna
+	 * Entradas: un int y un String
+	 * Salidas: nada
+	 * Postcondiciones: ninguna
+	 */
+	private void despenalizado(String codigoUsuario, String rutaUsuarioSubClase) {
+		ArrayList<UsuarioImpl> aux = new UtilFileGen<UsuarioImpl>().leerFicheroBinario(rutaUsuarioSubClase), auxiliar = new ArrayList<UsuarioImpl>();
+		UsuarioImpl despenar = new UtilFileGen<UsuarioImpl>().busqueda(codigoUsuario, rutaUsuarioSubClase).get(0);
+		
+
+		despenar.setInicioSuspension(null);
+		despenar.SetPeriodoSuspension(0);
+		for(int i = 0; i<aux.size();i++) {
+			if(despenar.getCodigo()==aux.get(i).getCodigo()){
+				auxiliar.add(despenar);
+			} else {
+				auxiliar.add(aux.get(i));
+			}
+		}
+		
+		new UtilFileGen<UsuarioImpl>().escribirMultiplesRegistroBinario(auxiliar, rutaUsuarioSubClase);
+	}
+
 	/**Interfaz: esElMismoUsuario
 	 * Cabecera: private boolean esElMismoUsuario(ArrayList<PrestamoImpl> aInsertar)
 	 * Comentario: Dado un ArrayList con los prestamos a insertar se comprueba que es solo un usuario, devuelve true si todos los prestamos son del mismo usuario y
@@ -435,8 +584,8 @@ public class GestionPrestamos <T> {
 		boolean devolver = true;
 		int aux = aInsertar.get(0).getCodigoUsuario();
 		
-		for(int i = 1; i<aInsertar.size() || devolver; i++) {
-			if(aux != aInsertar.get(i).getCodigoUsuario()) {
+		for(int i = 0; i <= (aInsertar.size()-1) && devolver; ++i) {
+			if(i !=0 && aux != aInsertar.get(i).getCodigoUsuario()) {
 				devolver = false;
 			}
 		}
@@ -482,15 +631,19 @@ public class GestionPrestamos <T> {
 	 */
 	private void penalizar(ArrayList<PrestamoImpl> aDevolver, String rutaUsuarioSubClase, String rutaDocumentoSubClase) {
 		AlumnoImpl auxAlu = new AlumnoImpl();
-		ArrayList<AlumnoImpl> alumnos = new ArrayList<AlumnoImpl>();
+		ArrayList<AlumnoImpl> alumnos = new ArrayList<AlumnoImpl>(), auxiliar = new ArrayList<AlumnoImpl>();
 		String codigoAlumno = "("+aDevolver.get(0).getCodigoUsuario();
 		UtilFileGen<AlumnoImpl> auxAlumnos = new UtilFileGen<AlumnoImpl>();
-		int dias = 0, diasAux, multPen;
+		int  dias = 0, diasAux, multPen;
 		
 		auxAlu = auxAlumnos.busqueda(codigoAlumno, rutaUsuarioSubClase).get(0);
 		alumnos = auxAlumnos.leerFicheroBinario(rutaUsuarioSubClase);
-		alumnos.remove(auxAlu);
-		dias = auxAlu.getPeriodoSuspension();
+		
+		dias = (int) ChronoUnit.DAYS.between(auxAlu.getInicioSuspension().plusDays(auxAlu.getPeriodoSuspension()), LocalDate.now());
+		if(dias<0) {
+			dias = 0;
+		}
+		auxAlumnos.borrarFicheroBinario(rutaUsuarioSubClase);
 		for (PrestamoImpl prestamoImpl : aDevolver) {
 			diasAux = diasRetraso(prestamoImpl, rutaDocumentoSubClase);
 			multPen = multiplicadorTipoPrestamo(prestamoImpl, rutaDocumentoSubClase);
@@ -499,7 +652,16 @@ public class GestionPrestamos <T> {
 			}
 		}
 		auxAlu.SetPeriodoSuspension(dias);
-		auxAlumnos.escribirRegistroBinario(auxAlu, rutaUsuarioSubClase);
+		auxAlu.setInicioSuspension(LocalDate.now());
+		for(int i = 0; i<alumnos.size();i++) {
+			if(auxAlu.getCodigo()==alumnos.get(i).getCodigo()) {
+				auxiliar.add(auxAlu);
+			} else {
+				auxiliar.add(alumnos.get(i));
+			}
+		}
+		auxAlumnos.crearFicheroBinario(rutaUsuarioSubClase);
+		auxAlumnos.escribirMultiplesRegistroBinario(auxiliar, rutaUsuarioSubClase);
 	}
 	
 	/**Interfaz: multiplicadorTipoPrestamo
@@ -566,7 +728,7 @@ public class GestionPrestamos <T> {
 			sinActualizar = aux.leerFicheroBinario(Constantes.PRESTAMOSITUACION);
 			for(int i = 0 ; i< aModificar.size(); i++, encontrado = false) {
 				for(int j = 0; j < sinActualizar.size()  || !encontrado; j++) {
-					if(sinActualizar.get(j).compareTo(aModificar.get(i))==0 && sinActualizar.get(j).getDiaDevolucion() == null) {
+					if(sinActualizar.get(j).compareTo(aModificar.get(i))==0) {
 						encontrado = true;
 					} else {
 						actualizado.add(sinActualizar.get(j));
@@ -577,6 +739,7 @@ public class GestionPrestamos <T> {
 			aux.crearFicheroBinario(Constantes.PRESTAMOSITUACION);
 			//for (PrestamoImpl prestamoImpl : actualizado) {
 				aux.escribirMultiplesRegistroBinario(actualizado, Constantes.PRESTAMOSITUACION);
+				aux.escribirMultiplesRegistroBinario(aModificar, Constantes.PRESTAMOHISTORICO);
 			//}
 			devolver = true;
 		}

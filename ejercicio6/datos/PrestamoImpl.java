@@ -34,11 +34,12 @@ public class PrestamoImpl implements Prestamo, Serializable, Comparable <Prestam
 		this.diaDevolucion = null;
 	}
 	
-	public PrestamoImpl(int nuevoCodigoUsuario, int nuevoCodigoDocumento) {
+	public PrestamoImpl(int nuevoCodigoUsuario, int nuevoCodigoDocumento, String especialidad) {
 		this.codigoUsuario = nuevoCodigoUsuario;
 		this.codigoDocumento = nuevoCodigoDocumento;
 		this.diaDelPrestamo = LocalDate.now();
 		this.diaDevolucion = null;
+		this.especialidad = especialidad;
 	}
 	
 	public int getCodigoUsuario(){
@@ -54,9 +55,9 @@ public class PrestamoImpl implements Prestamo, Serializable, Comparable <Prestam
 		long diasEnPrestamo=0;
 		if(this.diaDevolucion == null){
 			LocalDate hoy = LocalDate.now();
-			ChronoUnit.DAYS.between(this.diaDelPrestamo,hoy);
+			diasEnPrestamo = ChronoUnit.DAYS.between(this.diaDelPrestamo,hoy);
 		} else {
-			ChronoUnit.DAYS.between(this.diaDelPrestamo,this.diaDevolucion);
+			diasEnPrestamo = ChronoUnit.DAYS.between(this.diaDelPrestamo,this.diaDevolucion);
 		}
 		
 		return diasEnPrestamo;
@@ -79,7 +80,7 @@ public class PrestamoImpl implements Prestamo, Serializable, Comparable <Prestam
 	public void setDiaDevolucion(LocalDate diaDevolucion) {
 		this.diaDevolucion = diaDevolucion;
 	}
-	public void setEspecialidad(String especialidad) {
+	public void setEspecialidad (String especialidad) {
 		this.especialidad = especialidad;
 	}
 	//Metodos
@@ -115,10 +116,11 @@ public class PrestamoImpl implements Prestamo, Serializable, Comparable <Prestam
 		return compara;
 	}
 	public String toString() {
-		return "("+this.getCodigoUsuario()+","+this.getCodigoDocumento()+","+this.getDiaDelPrestamo()+","+this.getDiaDevolucion()+","+this.getDiasEnPrestamo()+")";
+		return "("+this.getCodigoUsuario()+","+this.getCodigoDocumento()+","+this.getEspecialidad()+","+this.getDiaDelPrestamo()+","+this.getDiaDevolucion()+","+this.getDiasEnPrestamo()+")";
 	}
 	public String mostrar() {
-		 return "Codigo del Alumno: "+this.getCodigoUsuario()+"\nCodigo del documento: "+this.getCodigoDocumento()+"\nDia inicio del prestamo: "
-				 +this.getDiaDelPrestamo()+"\nDia de la devolucion:"+this.getDiaDevolucion()+"\nDias prestado: "+this.getDiasEnPrestamo();
+		 return "Codigo del Alumno: "+this.getCodigoUsuario()+"\nCodigo del documento: "+this.getCodigoDocumento()+"\nEspecialidad Documento: "+this.getEspecialidad()+
+				 "\nDia inicio del prestamo: "+this.getDiaDelPrestamo()+"\nDia de la devolucion: "+this.getDiaDevolucion()
+				 +"\nDias prestado: "+this.getDiasEnPrestamo();
 	 }
 }

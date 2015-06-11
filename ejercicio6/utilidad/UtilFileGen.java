@@ -293,7 +293,6 @@ public class UtilFileGen<T> implements Serializable{
 	 * Salida: un boolean
 	 * Postcondiciones: devuelve un boolean como true si se escribio bien y false en caso contrario o error 
 	*/
-	//probando a escribir objetos puros
 	public boolean escribirRegistroBinario(T introducir, String ficheroIntroducir){
 		boolean devolver= false;
 		FileOutputStream fosEscribir = null;
@@ -340,8 +339,8 @@ public class UtilFileGen<T> implements Serializable{
 			try{
 				fosEscribir = new FileOutputStream(ficheroIntroducir+".dat",true);
 				oosEscribir = new MiObjectOutputStream(fosEscribir);
-				for (T t : introducir) {
-					oosEscribir.writeObject(t);
+				for (int i =0 ; i <introducir.size();i++) {
+					oosEscribir.writeObject(introducir.get(i));
 				}
 				devolver = true;
 			}catch (IOException e) {
@@ -404,7 +403,6 @@ public class UtilFileGen<T> implements Serializable{
 	 * Salidas: una LinkedList
 	 * Postcondiciones: Se devuelve una LinkedList con los objetos del fichero ó null si existio algun error
 	 * 
-	 * Observaciones: necesita un cast al tipo de objeto que estemos leyendo.... no se si me gusta
 	 */
 	
 	@SuppressWarnings("unchecked")
