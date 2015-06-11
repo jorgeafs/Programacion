@@ -26,7 +26,7 @@ public interface Documento {
 	public int getTipoPrestamo ();
 	
 	public void setArea(String area);
-	public void setCodigoDocumento(int codigo);
+	public void setCodigo(int codigo);
 	public void setEspecialidad(String especialidad);
 	public void setFormato (String nuevoFormato);
 	public void setNumeroEjemplares(int nuevoNumeroEjemplares);

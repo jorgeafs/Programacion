@@ -34,9 +34,6 @@ public class DocumentoImpl implements Documento, Serializable, Comparable <Docum
 	}
 	
 	//getters
-	public int getCodigoDocumento() {
-		return DocumentoImpl.codigoDocumento;
-	}
 	public String getArea() {
 		return this.area;
 	}
@@ -60,7 +57,7 @@ public class DocumentoImpl implements Documento, Serializable, Comparable <Docum
 	public void setArea(String area) {
 		this.area = area;
 	}
-	public void setCodigoDocumento(int codigo) {
+	public void setCodigo(int codigo) {
 		DocumentoImpl.codigoDocumento = codigo;
 	}
 	public void setEspecialidad(String especialidad) {

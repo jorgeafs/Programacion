@@ -159,6 +159,7 @@ public class UtilFileGen<T> implements Serializable{
 	 *  Salida: un boolean 
 	 *  Postcondiciones: Devuelve un true si se copio correctamente y false en caso de error o si no existia
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean copiarFicheroBinario(String ficheroOrigen, String ficheroCopia) {
 		boolean correcto = false;
 		
@@ -406,6 +407,7 @@ public class UtilFileGen<T> implements Serializable{
 	 * Observaciones: necesita un cast al tipo de objeto que estemos leyendo.... no se si me gusta
 	 */
 	
+	@SuppressWarnings("unchecked")
 	public  ArrayList<T> leerFicheroBinario (String ruta) {
 		ArrayList<T> devolver = new ArrayList<T>();
 		FileInputStream fisLeer = null;
@@ -555,6 +557,7 @@ public class UtilFileGen<T> implements Serializable{
 	*/
 	private List<T> ordenarArray(String desordenado) {
 		List<T> origen = leerFicheroBinario(desordenado);
+		@SuppressWarnings("unchecked")
 		T [] aux = (T[]) origen.toArray();
 		if (aux != null) {
 			Arrays.sort(aux);

@@ -18,13 +18,6 @@ public class DocumentoImplTest {
 	}
 
 	@Test
-	public void testGetCodigoDocumento() {
-		//fail("Not yet implemented");
-		DocumentoImpl prueba = new DocumentoImpl("Humanidades", "Historia Antigua", "libro", 15, 5);
-		assertEquals("No funciono el getCodigoDocumento", 13, prueba.getCodigoDocumento());
-	}
-
-	@Test
 	public void testGetArea() {
 		//fail("Not yet implemented");
 		DocumentoImpl prueba = new DocumentoImpl("Humanidades", "Historia Antigua", "libro", 15, 5);
@@ -79,7 +72,7 @@ public class DocumentoImplTest {
 	public void testSetCodigo() {
 		//fail("Not yet implemented");
 		DocumentoImpl prueba = new DocumentoImpl();
-		prueba.setCodigoDocumento(0);
+		prueba.setCodigo(0);
 		prueba = new DocumentoImpl();
 		assertEquals("No funciono el setCodigoDocumento", 1, prueba.getCodigo());
 	}

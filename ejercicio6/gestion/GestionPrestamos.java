@@ -641,7 +641,7 @@ public class GestionPrestamos <T> {
 		auxLibro.addAll(aux.leerFicheroBinario(rutaDocumentoSubClase));
 		if(auxLibro!=null && !auxLibro.isEmpty()){
 			for (int i = 0, j=0; i<auxLibro.size(); i++) {
-				if(quedanEjemplares(auxLibro.get(i).getCodigoDocumento(), rutaDocumentoSubClase)) {
+				if(quedanEjemplares(auxLibro.get(i).getCodigo(), rutaDocumentoSubClase)) {
 					j++;
 					System.out.println("\n"+auxLibro.get(i).mostrarObjeto());
 					if(j%5 == 0) {
