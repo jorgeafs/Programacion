@@ -96,6 +96,20 @@ public class LibroImpl extends DocumentoImpl implements Libro {
 		return super.mostrar()+this.mostrarObjeto();
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		boolean igual = false;
+		LibroImpl aux = null;
+		
+		if(o != null && o instanceof LibroImpl){
+			aux = (LibroImpl) o;
+			if(this.getCodigo()==aux.getCodigo()) {
+				igual = true;
+			}
+		}
+		return igual;
+	}
+	
 	public String mostrarObjeto(){
 		return "\nTitulo: "+this.getTitulo()+"\nAutor: "+this.getAutor()+"\nEditorial: "+this.getEditorial()+"\nEdicion: "+this.getEdicion()+
 				"; Reimpresion: "+this.getReimpresion()+"\nISBN: "+this.getIsbn();

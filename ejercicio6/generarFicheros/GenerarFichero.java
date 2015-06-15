@@ -25,6 +25,7 @@ public class GenerarFichero {
 		auxAlu.add(new AlumnoImpl("Luis", "Gonzalez", "Sanchez", "88566757", Constantes.ALUMNO, 0, null,0, "Periodismo"));
 		auxAlu.add(new AlumnoImpl("Julian", "Montenegro", "Muñoz", "78577757", Constantes.ALUMNO, 0, null,0, "Biologia"));
 /*10*/	auxAlu.add(new AlumnoImpl("Luis", "Muñoz", "Sanchez", "10566797", Constantes.ALUMNO, 0, null,0, "Periodismo"));
+		auxAlu.add(new AlumnoImpl("Pablo", "Buena", "Sanchez", "10563497", Constantes.ALUMNO, 0, null,0, "Informatico"));
 		System.out.println(auxAlu.get(auxAlu.size()-1).getCodigo());
 		auxA.crearFicheroBinario(Constantes.ALUMNOS);
 		auxA.escribirMultiplesRegistroBinario(auxAlu, Constantes.ALUMNOS);
@@ -45,9 +46,9 @@ public class GenerarFichero {
 		
 /*1*/	auxPres.add(new PrestamoImpl(1, 3,"Culto Romano"));
 		auxPres.add(new PrestamoImpl(2, 2, "Culto Romano"));
-		auxPres.add(new PrestamoImpl(10, 9, "Cartomagia"));
-		auxPres.add(new PrestamoImpl(9, 9, "Cartomagia"));
-/*5*/	auxPres.add(new PrestamoImpl(8, 9, "Cartomagia"));
+		auxPres.add(new PrestamoImpl(10, 10, "Cartomagia"));
+		auxPres.add(new PrestamoImpl(9, 10, "Cartomagia"));
+/*5*/	auxPres.add(new PrestamoImpl(8, 10, "Cartomagia"));
 		auxPres.add(new PrestamoImpl(7, 8, "Calculo Estructural"));
 		auxPres.add(new PrestamoImpl(5, 5, "Cirugia nuevas tecnicas"));
 		auxPres.add(new PrestamoImpl(4, 6, "Cirugia general"));
@@ -83,10 +84,10 @@ public class GenerarFichero {
 		
 /*1*/	auxPres.add(new PrestamoImpl(1, 3,"Culto Romano"));
 		auxPres.add(new PrestamoImpl(2, 2, "Culto Romano"));
-		auxPres.add(new PrestamoImpl(10, 9, "Cartomagia"));
-		auxPres.add(new PrestamoImpl(9, 9, "Cartomagia"));
-/*5*/	auxPres.add(new PrestamoImpl(8, 9, "Cartomagia"));
-		auxPres.add(new PrestamoImpl(7, 8, "Calculo Estructural"));
+		auxPres.add(new PrestamoImpl(10, 10, "Cartomagia"));
+		auxPres.add(new PrestamoImpl(9, 10, "Cartomagia"));
+/*5*/	auxPres.add(new PrestamoImpl(8, 10, "Cartomagia"));
+		auxPres.add(new PrestamoImpl(7, 9, "Calculo Estructural"));
 		auxPres.add(new PrestamoImpl(5, 5, "Cirugia nuevas tecnicas"));
 		auxPres.add(new PrestamoImpl(4, 6, "Cirugia general"));
 		auxPres.add(new PrestamoImpl(3, 1, "Culto Romano"));

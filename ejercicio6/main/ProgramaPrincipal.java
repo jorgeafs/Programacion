@@ -31,7 +31,7 @@ import gestion.*;
  *
  */
 
-public class main {
+public class ProgramaPrincipal {
 
 	public static void main (String[] args) {
 		Scanner leer = new Scanner(System.in);
@@ -83,7 +83,7 @@ public class main {
 				}while(submenu<1||submenu>3);
 				switch(submenu) {
 				case 1:
-					apoyo = null;
+					prestamo.clear();
 					do {
 						do {
 							menuPrestamo();

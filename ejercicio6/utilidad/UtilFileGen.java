@@ -343,6 +343,7 @@ public class UtilFileGen<T> implements Serializable{
 				oosEscribir = new MiObjectOutputStream(fosEscribir);
 				for (int i =0 ; i <introducir.size();i++) {
 					oosEscribir.writeObject(introducir.get(i));
+					//System.out.println(introducir.get(i).toString());
 				}
 				devolver = true;
 			}catch (IOException e) {
