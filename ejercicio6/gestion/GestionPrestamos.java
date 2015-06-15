@@ -209,18 +209,24 @@ public class GestionPrestamos <T> {
 		return devolver;
 	}
 	
+	/**Interfaz buscarLibro
+	 * Cabecera:  private LibroImpl buscarLibro(ArrayList<LibroImpl> aux, int codigoDocumento)
+	 * Comentario: Dado un ArrayList y un codigoDocumento busca el libro dentro del ArrayList. Devuelve el LibroImpl buscado o null en caso de no encontrarlo o de fallo
+	 * Precondicion: ninguna
+	 * Entradas: un ArrayList y un int
+	 * Salidas: un LibroImpl
+	 * Postcondiciones: Devuelve el LibroImpl buscado o null en caso de no encontrarlo o de fallo
+	 */
 	private LibroImpl buscarLibro(ArrayList<LibroImpl> aux, int codigoDocumento) {
-		int indice;
-		boolean encontrado = false;
+		LibroImpl devolver = null;
 		
-		for(int i = 0; i<aux.size() || !encontrado ;i++){
+		for(int i = 0; i < aux.size() && devolver!=null ;i++){
 			if(codigoDocumento == aux.get(i).getCodigo()) {
-				indice = i;
-				encontrado = true;
+				devolver = aux.get(i);
 			}
 		}
 		
-		return null;
+		return devolver;
 	}
 
 	/**Interfaz: contarEspecialidad
@@ -466,7 +472,7 @@ public class GestionPrestamos <T> {
 	 */	
 	private boolean sePuedePrestar(int codigoDocumento, String rutaDocumentoSubClase) {
 		boolean devolver = false;
-		String codigo = "("+codigoDocumento;
+		String codigo = "\\("+codigoDocumento;
 		DocumentoImpl aux = new UtilFileGen<DocumentoImpl>().busqueda(codigo, rutaDocumentoSubClase).get(0);
 		
 		if(aux != null && aux.getTipoPrestamo() > Constantes.SOLOCONSULTA) {
@@ -486,7 +492,7 @@ public class GestionPrestamos <T> {
 	 */
 	private boolean cumpleRestriccion(int codigoUsuario, String rutaUsuarioSubClase) {
 		boolean devolver = false;
-		String codigo = "("+codigoUsuario;
+		String codigo = "\\("+codigoUsuario;
 		UsuarioImpl aux = new UsuarioImpl();
 		ArrayList<Object> apoyo = new UtilFileGen<Object>().busqueda(codigo, rutaUsuarioSubClase);
 		
@@ -500,7 +506,7 @@ public class GestionPrestamos <T> {
 	}
 
 	/**Interfaz: quedanEjemplares
-	 * Cabecera: private boolean quedanEjemplares(int codigoDocumento, String rutaDocumentoSubClase) 
+	 * Cabecera: private boolean quedanEjemplares(int codigoDocumento, String rutaDocumentoSubClase)
 	 * Comentario: Dado un codigoDocumento y la ruta al fichero de documentos, devuelve true si quedan ejemplares accesibles y false en caso contrario o de error
 	 * Precondiciones: ninguna
 	 * Entradas: un int y un String
@@ -509,10 +515,19 @@ public class GestionPrestamos <T> {
 	 */
 	private boolean quedanEjemplares(int codigoDocumento, String rutaDocumentoSubClase) {
 		boolean devolver = false;
+		int contadorEjemplares;
 		String codigo = "("+codigoDocumento;
-		LibroImpl consultado = new UtilFileGen<LibroImpl>().busqueda(codigo, rutaDocumentoSubClase).get(0);
-		int contadorEjemplares = new UtilFileGen<PrestamoImpl>().busqueda(codigo,Constantes.PRESTAMOSITUACION).size();
-		
+		LibroImpl consultado = null;
+		ArrayList<PrestamoImpl> apoyo = new ArrayList<PrestamoImpl>();
+		consultado = new UtilFileGen<LibroImpl>().busqueda(codigo, rutaDocumentoSubClase).get(0);
+		codigo = "\\(\\d+,"+codigoDocumento;
+		//int contadorEjemplares = new UtilFileGen<PrestamoImpl>().busqueda(codigo,Constantes.PRESTAMOSITUACION).size();
+		apoyo = new UtilFileGen<PrestamoImpl>().busqueda(codigo,Constantes.PRESTAMOSITUACION);
+		if (apoyo == null) {
+			contadorEjemplares = 0;
+		} else {
+			contadorEjemplares = apoyo.size();
+		}
 		if(consultado != null && consultado.getNumeroEjemplares()>contadorEjemplares) {
 			devolver = true;
 		}
@@ -529,7 +544,7 @@ public class GestionPrestamos <T> {
 	 */
 	private boolean noPenalizado(int codigoUsuario, String rutaUsuarioSubClase) {
 		boolean devolver = false;
-		String codigo = "("+codigoUsuario;
+		String codigo = "\\("+codigoUsuario;
 		ArrayList<Object> auxAlu = new UtilFileGen<Object>().busqueda(codigo, rutaUsuarioSubClase);
 		LocalDate hoy = LocalDate.now();
 		UsuarioImpl apoyo = new UsuarioImpl();
@@ -539,7 +554,9 @@ public class GestionPrestamos <T> {
 			apoyo=(UsuarioImpl) auxAlu.get(0);
 			if(apoyo.getInicioSuspension() == null || hoy.isAfter(apoyo.getInicioSuspension().plusDays(apoyo.getPeriodoSuspension()))) {
 				devolver = true;
+				if(apoyo.getInicioSuspension() != null){
 				despenalizado( codigo, rutaUsuarioSubClase);
+				}
 			}
 		}
 		return devolver;
@@ -604,20 +621,26 @@ public class GestionPrestamos <T> {
 	 */
 	public boolean devolverPrestamo(ArrayList<PrestamoImpl> aDevolver, String rutaUsuarioSubClase, String rutaDocumentoSubClase) {
 		boolean devolver = false;
-		ArrayList<PrestamoImpl> auxiliar = new ArrayList<PrestamoImpl>();
+		ArrayList<PrestamoImpl> comparar = new ArrayList<PrestamoImpl>(), aModificar = new ArrayList<PrestamoImpl>();
+		String codigo;
 		
-		if(aDevolver != null && !aDevolver.isEmpty() && esUnicoUsuario(aDevolver))
-			if(modificar(aDevolver)) {
-				for (PrestamoImpl aux : aDevolver) {
-					if (fueraPlazo(aux,rutaDocumentoSubClase)){
-						auxiliar.add(aux);
+		if(aDevolver != null && !aDevolver.isEmpty() && esUnicoUsuario(aDevolver)) {
+			codigo = "("+aDevolver.get(0).getCodigoUsuario()+",";
+			comparar = new UtilFileGen<PrestamoImpl>().busqueda(codigo, Constantes.PRESTAMOSITUACION);
+			for(int i = 0; i<aDevolver.size();i++){
+				for(int j = 0; i<comparar.size(); i++){
+					if (aDevolver.get(i).getCodigoDocumento()==comparar.get(j).getCodigoDocumento()) {
+						comparar.get(j).setDiaDevolucion(LocalDate.now());
+						aModificar.add(comparar.get(j));
 					}
 				}
-				if(!auxiliar.isEmpty()) {
-					penalizar(auxiliar,rutaUsuarioSubClase,rutaDocumentoSubClase);
-				}
+			}
+			if(!aModificar.isEmpty()) {
+				modificar(aModificar);
+				penalizar(aModificar, rutaUsuarioSubClase, rutaDocumentoSubClase);
 				devolver = true;
 			}
+		}
 		return devolver;
 	}
 	
@@ -632,17 +655,23 @@ public class GestionPrestamos <T> {
 	private void penalizar(ArrayList<PrestamoImpl> aDevolver, String rutaUsuarioSubClase, String rutaDocumentoSubClase) {
 		AlumnoImpl auxAlu = new AlumnoImpl();
 		ArrayList<AlumnoImpl> alumnos = new ArrayList<AlumnoImpl>(), auxiliar = new ArrayList<AlumnoImpl>();
-		String codigoAlumno = "("+aDevolver.get(0).getCodigoUsuario();
+		String codigoAlumno = "("+aDevolver.get(0).getCodigoUsuario()+",";
 		UtilFileGen<AlumnoImpl> auxAlumnos = new UtilFileGen<AlumnoImpl>();
 		int  dias = 0, diasAux, multPen;
 		
 		auxAlu = auxAlumnos.busqueda(codigoAlumno, rutaUsuarioSubClase).get(0);
 		alumnos = auxAlumnos.leerFicheroBinario(rutaUsuarioSubClase);
 		
+		if(auxAlu.getInicioSuspension()==null) {
+			dias = 0;
+		} else {
 		dias = (int) ChronoUnit.DAYS.between(auxAlu.getInicioSuspension().plusDays(auxAlu.getPeriodoSuspension()), LocalDate.now());
+		}
+		
 		if(dias<0) {
 			dias = 0;
 		}
+		
 		auxAlumnos.borrarFicheroBinario(rutaUsuarioSubClase);
 		for (PrestamoImpl prestamoImpl : aDevolver) {
 			diasAux = diasRetraso(prestamoImpl, rutaDocumentoSubClase);
@@ -724,12 +753,14 @@ public class GestionPrestamos <T> {
 			}
 			devolver = true;*/
 			aux.escribirMultiplesRegistroBinario(aModificar, Constantes.PRESTAMOSITUACION);
+			devolver = true;
 		} else {											//se estan devolviendo
 			sinActualizar = aux.leerFicheroBinario(Constantes.PRESTAMOSITUACION);
 			for(int i = 0 ; i< aModificar.size(); i++, encontrado = false) {
 				for(int j = 0; j < sinActualizar.size()  || !encontrado; j++) {
 					if(sinActualizar.get(j).compareTo(aModificar.get(i))==0) {
 						encontrado = true;
+						actualizado.add(aModificar.get(i));
 					} else {
 						actualizado.add(sinActualizar.get(j));
 					}
@@ -754,6 +785,7 @@ public class GestionPrestamos <T> {
 	 *  Salida: un boolean
 	 *  Postcondiciones: Devuelve true si esta fuera de plazo y false en caso contrario o de error
 	 */
+	@Deprecated
 	private boolean fueraPlazo(PrestamoImpl aDevolver, String rutaDocumentoSubClase) {
 		boolean fuera = false;
 		DocumentoImpl auxDoc = new DocumentoImpl();
@@ -779,10 +811,14 @@ public class GestionPrestamos <T> {
 	 */
 	public int identificarAlumno(String nombre, String apellido1, String apellido2, String rutaUsuarioSubClase) {
 		int devolver = -1;
-		String codigo = "([0-9]+,"+nombre+","+apellido1+","+apellido2;
-		AlumnoImpl aux = new UtilFileGen<AlumnoImpl>().busqueda(codigo , rutaUsuarioSubClase).get(0);
-		if(aux != null) {
-			devolver = aux.getCodigo();
+		AlumnoImpl aux = null;
+		String codigo = nombre+","+apellido1+","+apellido2;
+		ArrayList<AlumnoImpl> auxiliar = new UtilFileGen<AlumnoImpl>().busqueda(codigo , rutaUsuarioSubClase);
+		if(auxiliar != null) {
+			aux = auxiliar.get(0);
+			if(aux!=null) {
+					devolver = aux.getCodigo();
+			}
 		}
 		return devolver;
 	}
@@ -806,8 +842,8 @@ public class GestionPrestamos <T> {
 			for (int i = 0, j=0; i<auxLibro.size(); i++) {
 				if(quedanEjemplares(auxLibro.get(i).getCodigo(), rutaDocumentoSubClase)) {
 					j++;
-					System.out.println("\n"+auxLibro.get(i).mostrarObjeto());
-					if(j%5 == 0) {
+					System.out.println("\n"+auxLibro.get(i).mostrar());
+					if(j%3 == 0) {
 						pulseCualquierTeclaParaContinuar();
 					}
 				}
@@ -826,7 +862,7 @@ public class GestionPrestamos <T> {
 	 */
 	private void pulseCualquierTeclaParaContinuar()
 	 { 
-	        System.out.println("Pulse cualquier tecla para continuar ...");
+	        System.out.println("Pulse enter para continuar ...");
 	        try
 	        {
 	            System.in.read();
@@ -834,4 +870,54 @@ public class GestionPrestamos <T> {
 	        catch(IOException e)
 	        {}  
 	 }
+	
+	/**Interfaz obtenerEspecialidad
+	 * Cabecera: public String obtenerEspecialidad(int codigoLib)
+	 * Comentaio: Dado un codigoLib busca el libro correspondiente en el fichero de libros. Devuelve un String con la especialidad o null de no encontrarlo
+	 * Precondiciones: Ninguna
+	 * Entradas: un entero
+	 * Salidas: un String
+	 * Postcondiciones: Devuelve un string con la especialidad o null en caso de no encontrarlo 
+	 */
+	public String obtenerEspecialidad(int codigoLib) {
+		String codigoLibro = "("+codigoLib;
+		LibroImpl aux = null;
+		aux = buscarLibro(new UtilFileGen<LibroImpl>().busqueda(codigoLibro, Constantes.LIBROS), codigoLib);
+		return aux.getEspecialidad();
+	}
+	
+	/**Interfaz listarLibrosADevolver
+	 * Cabecera: public void listarLibrosADevolver(int codigoAlu, String libros)
+	 * Comentaio: Dado un codigoLib busca el libro correspondiente en el fichero de libros. Devuelve un String con la especialidad o null de no encontrarlo
+	 * Precondiciones: Ninguna
+	 * Entradas: un entero
+	 * Salidas: un String
+	 * Postcondiciones: Devuelve un string con la especialidad o null en caso de no encontrarlo 
+	 */
+	public boolean listarLibrosADevolver(int codigoAlu, String rutaDocumentoSubClase) {
+		boolean devolver = false;
+		ArrayList<LibroImpl> auxLibro = new ArrayList<LibroImpl>();
+		ArrayList<PrestamoImpl> prestados = new ArrayList<PrestamoImpl>();
+		UtilFileGen<LibroImpl> auxL = new UtilFileGen<LibroImpl>();
+		UtilFileGen<PrestamoImpl> auxP = new UtilFileGen<PrestamoImpl>();
+		String codigo = "("+codigoAlu+",";
+		
+		auxLibro.addAll(auxL.leerFicheroBinario(rutaDocumentoSubClase));
+		prestados.addAll(auxP.busqueda(codigo,Constantes.PRESTAMOSITUACION));
+		if(auxLibro!=null && !auxLibro.isEmpty() && prestados!=null && !prestados.isEmpty()){
+			for (int i = 0, j=0; i < prestados.size(); i++) {
+				for (int k = 0; k<auxLibro.size(); k++) {
+					if(prestados.get(i).getCodigoDocumento()==auxLibro.get(k).getCodigo()) {
+						j++;
+						System.out.println("\n"+auxLibro.get(k).mostrar());
+						if(j%3 == 0) {
+							pulseCualquierTeclaParaContinuar();
+						}
+					}
+				}
+			}
+			devolver = true;
+		}
+		return devolver;
+	}
 }

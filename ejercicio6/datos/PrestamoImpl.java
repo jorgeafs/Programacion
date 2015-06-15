@@ -42,6 +42,14 @@ public class PrestamoImpl implements Prestamo, Serializable, Comparable <Prestam
 		this.especialidad = especialidad;
 	}
 	
+	public PrestamoImpl(int nuevoCodigoUsuario, int nuevoCodigoDocumento) {
+		this.codigoUsuario = nuevoCodigoUsuario;
+		this.codigoDocumento = nuevoCodigoDocumento;
+		this.diaDelPrestamo = LocalDate.now();
+		this.diaDevolucion = null;
+		this.especialidad = null;
+	}
+
 	public int getCodigoUsuario(){
 		return this.codigoUsuario;
 	}

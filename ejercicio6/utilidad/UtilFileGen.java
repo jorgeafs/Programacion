@@ -23,6 +23,8 @@ package utilidad;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UtilFileGen<T> implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -573,17 +575,36 @@ public class UtilFileGen<T> implements Serializable{
 	 * Salida: un tipo AlumnoImpl
 	 * Postcondicion: Devuelve un ArrayList con los que cumplan la condicion de busqueda o null en caso de no encontrar ningun objeto que cumpla la condicion de busqueda 
 	 */
+	//Pattern.compile(Pattern.quote(s2)).matcher(s1).find();Pattern.compile(Pattern.quote(buscar)).matcher(auxiliar.get(i).toString()).find()
+	//da errores cuando buscas por expresiones regulares.... y las necesito dammit--> ahora es "selectivo" regex
 	public ArrayList<T> busqueda (String buscar, String ruta) {
 		 ArrayList<T> devolver = null, auxiliar = null;
+		 //boolean auxB = false;
+		
 		 
 		 if(new File(ruta+".dat").isFile() && (auxiliar = leerFicheroBinario(ruta))!= null) {
 			 for(int i = 0; i < auxiliar.size(); i++) {
+				 /*String auxS = Pattern.quote(buscar);
+				 String prueba = auxiliar.get(i).toString();
+				 CharSequence apoyoC = prueba.;
+				 Pattern auxP = Pattern.compile(auxS);
+				 Matcher auxM = Pattern.matcher(apoyoC);*/
+				 //auxB = Pattern.compile(Pattern.quote(buscar)).matcher(auxiliar.get(i).toString()).find();
+				 Pattern p = Pattern.compile(Pattern.quote(buscar));
+				 Matcher m = p.matcher(auxiliar.get(i).toString());
+				 if(devolver == null && m.find()) {
+					 devolver = new ArrayList<T>();
+					 devolver.add(auxiliar.get(i));
+				 } else if (m.find()) {
+					 devolver.add(auxiliar.get(i));
+				 }
+				 /*
 				 if(devolver == null && auxiliar.get(i).toString().contains(buscar)) {
 					 devolver = new ArrayList<T>();
 					 devolver.add(auxiliar.get(i));
 				 } else if (auxiliar.get(i).toString().contains(buscar)) {
 					 devolver.add(auxiliar.get(i));
-				 }
+				 }*/
 			 }
 		 }
 		 
