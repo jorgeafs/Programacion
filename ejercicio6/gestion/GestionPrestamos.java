@@ -628,7 +628,7 @@ public class GestionPrestamos <T> {
 			codigo = "("+aDevolver.get(0).getCodigoUsuario()+",";
 			comparar = new UtilFileGen<PrestamoImpl>().busqueda(codigo, Constantes.PRESTAMOSITUACION);
 			for(int i = 0; i<aDevolver.size();i++){
-				for(int j = 0; i<comparar.size(); i++){
+				for(int j = 0; j<comparar.size(); j++){
 					if (aDevolver.get(i).getCodigoDocumento()==comparar.get(j).getCodigoDocumento()) {
 						comparar.get(j).setDiaDevolucion(LocalDate.now());
 						aModificar.add(comparar.get(j));
@@ -743,9 +743,9 @@ public class GestionPrestamos <T> {
 	 *  Postcondiciones: Devuelve true si se modifico correctamente y false en caso contrario o de error
 	 */
 	private boolean modificar(ArrayList<PrestamoImpl> aModificar) {
-		boolean devolver= false, encontrado = false;
+		boolean devolver= false/*, encontrado = false*/;
 		UtilFileGen<PrestamoImpl> aux = new UtilFileGen<PrestamoImpl>();
-		ArrayList<PrestamoImpl> sinActualizar = null, actualizado = new ArrayList<PrestamoImpl>();
+		ArrayList<PrestamoImpl> /*sinActualizar = null, */actualizado = new ArrayList<PrestamoImpl>();
 
 		if(aModificar.get(0).getDiaDevolucion() == null) {  // se estan prestando los documentos
 			/*for (PrestamoImpl prestamoImpl : aModificar) {
@@ -755,23 +755,23 @@ public class GestionPrestamos <T> {
 			aux.escribirMultiplesRegistroBinario(aModificar, Constantes.PRESTAMOSITUACION);
 			devolver = true;
 		} else {											//se estan devolviendo
-			sinActualizar = aux.leerFicheroBinario(Constantes.PRESTAMOSITUACION);
-			for(int i = 0 ; i< aModificar.size(); i++, encontrado = false) {
-				for(int j = 0; j < sinActualizar.size()  || !encontrado; j++) {
-					if(sinActualizar.get(j).compareTo(aModificar.get(i))==0) {
-						encontrado = true;
-						actualizado.add(aModificar.get(i));
-					} else {
+			actualizado = aux.leerFicheroBinario(Constantes.PRESTAMOSITUACION);
+			//actualizado.remove(aModificar);
+			for(int i = 0 ; i< aModificar.size(); i++) {
+				actualizado.remove(aModificar.get(i));
+				/*for(int j = 0; j < sinActualizar.size(); j++) {
+					if(sinActualizar.get(j).compareTo(aModificar.get(i))!=0) {
 						actualizado.add(sinActualizar.get(j));
 					}
+					
 				}
+			}*/
 			}
 			aux.borrarFicheroBinario(Constantes.PRESTAMOSITUACION);
 			aux.crearFicheroBinario(Constantes.PRESTAMOSITUACION);
-			//for (PrestamoImpl prestamoImpl : actualizado) {
-				aux.escribirMultiplesRegistroBinario(actualizado, Constantes.PRESTAMOSITUACION);
-				aux.escribirMultiplesRegistroBinario(aModificar, Constantes.PRESTAMOHISTORICO);
-			//}
+			aux.escribirMultiplesRegistroBinario(actualizado, Constantes.PRESTAMOSITUACION);
+			aux.escribirMultiplesRegistroBinario(aModificar, Constantes.PRESTAMOHISTORICO);
+			
 			devolver = true;
 		}
 		return devolver;

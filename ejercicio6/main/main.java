@@ -36,7 +36,7 @@ public class main {
 	public static void main (String[] args) {
 		Scanner leer = new Scanner(System.in);
 		int opcion, submenu,codigoAlu,codigoLib, menuPrestar, contador;
-		String nombre, apellido1, apellido2, especialidad;
+		String nombre, apellido1, apellido2;
 		PrestamoImpl apoyo = new PrestamoImpl();
 		ArrayList<PrestamoImpl> prestamo = new ArrayList<PrestamoImpl>(), prestamoAux = new ArrayList<PrestamoImpl>();
 		GestionPrestamos<AlumnoImpl> auxL = new GestionPrestamos<AlumnoImpl>();
@@ -83,6 +83,7 @@ public class main {
 				}while(submenu<1||submenu>3);
 				switch(submenu) {
 				case 1:
+					apoyo = null;
 					do {
 						do {
 							menuPrestamo();
@@ -91,10 +92,10 @@ public class main {
 						if(menuPrestar ==1) {
 
 							new GestionPrestamos<>().listarLibrosDisponibles(Constantes.LIBROS);
-							System.out.println("Introduzca el codigo del libro");
+							System.out.println("\nIntroduzca el codigo del libro");
 							codigoLib=leer.nextInt();
-							especialidad =  new GestionPrestamos<String>().obtenerEspecialidad(codigoLib);
-							apoyo = new PrestamoImpl(codigoAlu,codigoLib,especialidad);
+							//especialidad =  new GestionPrestamos<String>().obtenerEspecialidad(codigoLib);
+							apoyo = new PrestamoImpl(codigoAlu,codigoLib);
 							prestamo.add(apoyo);
 						}
 					}while (menuPrestar != 2);
@@ -112,7 +113,7 @@ public class main {
 						if(menuPrestar ==1) {
 
 							if(new GestionPrestamos<>().listarLibrosADevolver(codigoAlu, Constantes.LIBROS)){
-							System.out.println("Introduzca el codigo del libro");
+							System.out.println("\nIntroduzca el codigo del libro");
 							codigoLib=leer.nextInt();
 							//System.out.println("Introduzca la especialidad del libro");
 							//leer.nextLine();

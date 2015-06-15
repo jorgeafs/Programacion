@@ -6,6 +6,7 @@ import utilidad.*;
 
 public class MostrarFicheros {
 
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		ArrayList<PrestamoImpl> arrayP = new ArrayList<PrestamoImpl>();
 		ArrayList<LibroImpl> arrayL = new ArrayList<LibroImpl>();

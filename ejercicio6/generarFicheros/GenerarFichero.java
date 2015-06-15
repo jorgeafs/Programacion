@@ -1,7 +1,5 @@
 package generarFicheros;
 
-import gestion.GestionPrestamos;
-
 import java.time.LocalDate;
 import java.util.*;
 

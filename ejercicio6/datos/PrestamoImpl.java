@@ -101,7 +101,8 @@ public class PrestamoImpl implements Prestamo, Serializable, Comparable <Prestam
 		
 		if(o != null && o instanceof PrestamoImpl) {
 			aux = (PrestamoImpl) o;
-			if(this.getCodigoUsuario() == aux.getCodigoUsuario() && this.getCodigoDocumento() == aux.getCodigoDocumento()&&this.getDiaDelPrestamo()==aux.getDiaDelPrestamo()){
+			if(this.getCodigoUsuario() == aux.getCodigoUsuario() && this.getCodigoDocumento() 
+					== aux.getCodigoDocumento() && this.getDiaDelPrestamo().isEqual(aux.getDiaDelPrestamo())){
 				igual = true;
 			}
 		}
