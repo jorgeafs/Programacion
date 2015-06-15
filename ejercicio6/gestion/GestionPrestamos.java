@@ -261,7 +261,7 @@ public class GestionPrestamos <T> {
 	
 		if(!auxPrest.isEmpty()) {
 			for(PrestamoImpl aux : auxPrest){
-				auxInt.add(aux.getCodigoDocumento());
+				auxInt.add(aux.getCodigoDocumento()-1);
 			}
 			contador = Collections.frequency(auxInt, auxInt.get(0));
 			for(int i=1 ; i < auxPrest.size(); i++) {
@@ -435,7 +435,7 @@ public class GestionPrestamos <T> {
 	
 		if(!auxPrest.isEmpty()) {
 			for(PrestamoImpl aux : auxPrest){
-				auxString.add(auxLibro.get(aux.getCodigoDocumento()).getEspecialidad());
+				auxString.add(auxLibro.get(aux.getCodigoDocumento()-1).getEspecialidad());
 			}
 			contador = Collections.frequency(auxString, auxString.get(0));
 			for(int i=1 ; i < auxPrest.size(); i++) {

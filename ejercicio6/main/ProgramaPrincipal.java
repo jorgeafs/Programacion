@@ -204,6 +204,7 @@ public class ProgramaPrincipal {
 			case 4:
 				apoyoA = auxA.alumnosDevPendientes(Constantes.ALUMNOS);
 				if(!apoyoA.isEmpty()) {
+					System.out.println("A continuacion se muestran los alumnos con devoluciones pendientes:\n");
 					for(AlumnoImpl aux : apoyoA) {
 						System.out.println(aux.toString()+"\n");
 					}
