@@ -34,15 +34,15 @@ public class ConductorGestionPrestamos {
 		auxS.listarLibrosDisponibles(Constantes.LIBROS);
 		//Pruebo realizarPrestamo
 		//primero miro si me deja sacar un libro prestado
-		auxiliar = new PrestamoImpl(2, 3, "Culto Romano");
+		auxiliar = new PrestamoImpl(2, 3);
 		ArrayList<PrestamoImpl> auxiliarP = new ArrayList<PrestamoImpl>();
 		auxiliarP.add(auxiliar);
 		System.out.println("Probamos a sacar un libro al que no le quedan mas ejemplares\n"+auxP.realizarPrestamo(auxiliarP, Constantes.ALUMNOS, Constantes.LIBROS));
-		auxiliar = new PrestamoImpl(3,5, "Cirugia Nuevas tecnicas");
+		auxiliar = new PrestamoImpl(3,5);
 		auxiliarP.add(auxiliar);
 		System.out.println("\nProbamos a prestar dos libros a distintos usuarios\n"+auxP.realizarPrestamo(auxiliarP, Constantes.ALUMNOS, Constantes.LIBROS));
 		auxiliarP.remove(1);//.remove me funciona indicando el indice y por ahora no me funciona con el objeto
-		auxiliarP.add( new PrestamoImpl(2, 5, "Cirugia Nuevas tecnicas"));
+		auxiliarP.add( new PrestamoImpl(2, 5));
 		System.out.println("\nProbamos a prestar dos libros al mismo usuario, pero uno de ellos solo tiene un ejemplar que ya esta prestado\n"+auxP.realizarPrestamo(auxiliarP, Constantes.ALUMNOS, Constantes.LIBROS));
 		//System.out.println("\n"+new UtilFileGen<PrestamoImpl>().leerFicheroBinario(Constantes.ALUMNOS));
 		

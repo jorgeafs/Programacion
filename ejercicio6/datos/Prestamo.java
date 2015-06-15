@@ -8,12 +8,10 @@ package datos;
  * 	public LocalDate getDiaDelPrestamo();
  * 	public LocalDate getDiaDevolucion();
  * 	public long getDiasEnPrestamo();
- * 	public String getEspecialidad();
  * 	public void setCodigoAlumno(int nuevoCodigoAlumno);
  * 	public void setCodigoDocumento(int nuevoCodigoDocumento);
  * 	public void setDiaDelPrestamo(LocalDate nuevoDiadelPrestamo);
  * 	public void setDiaDevolucion(LocalDate diaDvolucion);
- * 	public void setEspecialidad(String especialidad);
  *
  */
 
@@ -26,10 +24,8 @@ public interface Prestamo {
 	public LocalDate getDiaDelPrestamo();
 	public LocalDate getDiaDevolucion();
 	public long getDiasEnPrestamo();
-	public String getEspecialidad();
 	public void setCodigoUsuario(int nuevoCodigoAlumno);
 	public void setCodigoDocumento(int nuevoCodigoDocumento);
 	public void setDiaDelPrestamo(LocalDate nuevoDiadelPrestamo);
 	public void setDiaDevolucion(LocalDate diaDvolucion);
-	public void setEspecialidad(String especialidad);
 }

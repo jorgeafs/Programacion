@@ -7,7 +7,6 @@ package datos;
  * 		diaDelPrestamo --> Básica, tipo LocalDate, modificable y consultable
  * 		diaDevolucion --> Basica, tipo LocalDate, modificable y consutable
  * 		diasEnPrestamo --> derivado, tipo entero, consultable
- * 		especialidad --> Básica, tipo String, modificable y consultable
  * 	
  * 	Funcionalidades:
  * 		public boolean equals(PrestamoImpl seraIgual);
@@ -25,7 +24,6 @@ public class PrestamoImpl implements Prestamo, Serializable, Comparable <Prestam
 	private int codigoDocumento;
 	private LocalDate diaDelPrestamo;
 	private LocalDate diaDevolucion;
-	private String especialidad;
 	
 	public PrestamoImpl(){
 		this.codigoUsuario = 0;
@@ -34,20 +32,11 @@ public class PrestamoImpl implements Prestamo, Serializable, Comparable <Prestam
 		this.diaDevolucion = null;
 	}
 	
-	public PrestamoImpl(int nuevoCodigoUsuario, int nuevoCodigoDocumento, String especialidad) {
-		this.codigoUsuario = nuevoCodigoUsuario;
-		this.codigoDocumento = nuevoCodigoDocumento;
-		this.diaDelPrestamo = LocalDate.now();
-		this.diaDevolucion = null;
-		this.especialidad = especialidad;
-	}
-	
 	public PrestamoImpl(int nuevoCodigoUsuario, int nuevoCodigoDocumento) {
 		this.codigoUsuario = nuevoCodigoUsuario;
 		this.codigoDocumento = nuevoCodigoDocumento;
 		this.diaDelPrestamo = LocalDate.now();
 		this.diaDevolucion = null;
-		this.especialidad = null;
 	}
 
 	public int getCodigoUsuario(){
@@ -73,9 +62,6 @@ public class PrestamoImpl implements Prestamo, Serializable, Comparable <Prestam
 	public LocalDate getDiaDevolucion() {
 		return this.diaDevolucion;
 	}
-	public String getEspecialidad() {
-		return this.especialidad;
-	}
 	public void setCodigoUsuario(int nuevoCodigoUsuario){
 		this.codigoUsuario = nuevoCodigoUsuario;
 	}
@@ -87,9 +73,6 @@ public class PrestamoImpl implements Prestamo, Serializable, Comparable <Prestam
 	}
 	public void setDiaDevolucion(LocalDate diaDevolucion) {
 		this.diaDevolucion = diaDevolucion;
-	}
-	public void setEspecialidad (String especialidad) {
-		this.especialidad = especialidad;
 	}
 	//Metodos
 	
@@ -125,10 +108,10 @@ public class PrestamoImpl implements Prestamo, Serializable, Comparable <Prestam
 		return compara;
 	}
 	public String toString() {
-		return "("+this.getCodigoUsuario()+","+this.getCodigoDocumento()+","+this.getEspecialidad()+","+this.getDiaDelPrestamo()+","+this.getDiaDevolucion()+","+this.getDiasEnPrestamo()+")";
+		return "("+this.getCodigoUsuario()+","+this.getCodigoDocumento()+","+this.getDiaDelPrestamo()+","+this.getDiaDevolucion()+","+this.getDiasEnPrestamo()+")";
 	}
 	public String mostrar() {
-		 return "Codigo del Alumno: "+this.getCodigoUsuario()+"\nCodigo del documento: "+this.getCodigoDocumento()+"\nEspecialidad Documento: "+this.getEspecialidad()+
+		 return "Codigo del Alumno: "+this.getCodigoUsuario()+"\nCodigo del documento: "+this.getCodigoDocumento()+
 				 "\nDia inicio del prestamo: "+this.getDiaDelPrestamo()+"\nDia de la devolucion: "+this.getDiaDevolucion()
 				 +"\nDias prestado: "+this.getDiasEnPrestamo();
 	 }

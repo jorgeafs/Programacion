@@ -13,7 +13,7 @@ public class PrestamoImplTest {
 	public void testPrestamoImpl() {
 		//fail("Not yet implemented");
 		PrestamoImpl prueba = new PrestamoImpl();
-		PrestamoImpl prueba1 = new PrestamoImpl(15, 16,"flipa");
+		PrestamoImpl prueba1 = new PrestamoImpl(15, 16);
 		assertNotNull("Fallo el constructor por defecto",prueba);
 		assertNotNull("Fallo el constructor por parametros",prueba1);
 	}
@@ -21,28 +21,28 @@ public class PrestamoImplTest {
 	@Test
 	public void testGetCodigoAlumno() {
 		//fail("Not yet implemented");
-		PrestamoImpl prueba = new PrestamoImpl(15, 16,"flipa");
+		PrestamoImpl prueba = new PrestamoImpl(15, 16);
 		assertEquals("Fallo el getCodigoAlumno",15,prueba.getCodigoUsuario());
 	}
 
 	@Test
 	public void testGetCodigoDocumento() {
 		//fail("Not yet implemented");
-		PrestamoImpl prueba = new PrestamoImpl(15, 16,"flipa");
+		PrestamoImpl prueba = new PrestamoImpl(15, 16);
 		assertEquals("Fallo el getCodigoDocumento",16,prueba.getCodigoDocumento());
 	}
 
 	@Test
 	public void testGetDiaDelPrestamo() {
 		//fail("Not yet implemented");
-		PrestamoImpl prueba = new PrestamoImpl(15, 16,"flipa");
+		PrestamoImpl prueba = new PrestamoImpl(15, 16);
 		assertEquals("Fallo el getDiaDelPrestamo",LocalDate.now() ,prueba.getDiaDelPrestamo());
 	}
 
 	@Test//se testeara despues de setDiaDevolucion y setDiaDelPrestamo
 	public void testGetDiasEnPrestamo() {
 		//fail("Not yet implemented");
-		PrestamoImpl prueba = new PrestamoImpl(15, 16,"flipa");
+		PrestamoImpl prueba = new PrestamoImpl(15, 16);
 		prueba.setDiaDelPrestamo(LocalDate.now().minusDays(6));
 		//System.out.println(prueba.getDiasEnPrestamo());
 		prueba.setDiaDevolucion(LocalDate.now().minusDays(3));
@@ -54,7 +54,7 @@ public class PrestamoImplTest {
 	@Test//se extendera el testeo despues de testear los setters
 	public void testGetDiaDevolucion() {
 		//fail("Not yet implemented");
-		PrestamoImpl prueba = new PrestamoImpl(15, 16,"flipa");
+		PrestamoImpl prueba = new PrestamoImpl(15, 16);
 		assertNull("Fallo el getDiaDevolucion",prueba.getDiaDevolucion());
 		prueba.setDiaDelPrestamo(LocalDate.now().minusDays(22));
 		prueba.setDiaDevolucion(LocalDate.now().minusDays(15));
@@ -64,7 +64,7 @@ public class PrestamoImplTest {
 	@Test
 	public void testSetCodigoAlumno() {
 		//fail("Not yet implemented");
-		PrestamoImpl prueba = new PrestamoImpl(15, 16,"flipa");
+		PrestamoImpl prueba = new PrestamoImpl(15, 16);
 		prueba.setCodigoUsuario(22);
 		assertEquals("Fallo el getCodigoAlumno",22 ,prueba.getCodigoUsuario());
 	}
@@ -72,7 +72,7 @@ public class PrestamoImplTest {
 	@Test
 	public void testSetCodigoDocumento() {
 		//fail("Not yet implemented");
-		PrestamoImpl prueba = new PrestamoImpl(15, 16,"flipa");
+		PrestamoImpl prueba = new PrestamoImpl(15, 16);
 		prueba.setCodigoDocumento(22);
 		assertEquals("Fallo el getCodigoDocumento",22 ,prueba.getCodigoDocumento());
 	}
@@ -80,7 +80,7 @@ public class PrestamoImplTest {
 	@Test
 	public void testSetDiaDelPrestamo() {
 		//fail("Not yet implemented");
-		PrestamoImpl prueba = new PrestamoImpl(15, 16,"flipa");
+		PrestamoImpl prueba = new PrestamoImpl(15, 16);
 		prueba.setDiaDelPrestamo(LocalDate.now().minusDays(6));
 		assertEquals("Fallo el getDiaDelPrestamo",LocalDate.now().minusDays(6),prueba.getDiaDelPrestamo());
 	}
@@ -88,7 +88,7 @@ public class PrestamoImplTest {
 	@Test
 	public void testSetDiaDevolucion() {
 		//fail("Not yet implemented");
-		PrestamoImpl prueba = new PrestamoImpl(15, 16,"flipa");
+		PrestamoImpl prueba = new PrestamoImpl(15, 16);
 		prueba.setDiaDevolucion(LocalDate.now().plusDays(5));
 		assertEquals("Fallo el getDiaDevolucion",LocalDate.now().plusDays(5),prueba.getDiaDevolucion());
 	}
@@ -96,10 +96,10 @@ public class PrestamoImplTest {
 	@Test
 	public void testEqualsObject() {
 		//fail("Not yet implemented");
-		PrestamoImpl prueba = new PrestamoImpl(15, 16,"flipa");
+		PrestamoImpl prueba = new PrestamoImpl(15, 16);
 		prueba.setDiaDelPrestamo(LocalDate.now().minusDays(22));
 		prueba.setDiaDevolucion(LocalDate.now().minusDays(15));
-		PrestamoImpl prueba1 = new PrestamoImpl(12, 11,"flipa");
+		PrestamoImpl prueba1 = new PrestamoImpl(12, 11);
 		prueba1.setDiaDelPrestamo(LocalDate.now().minusDays(23));
 		prueba1.setDiaDevolucion(LocalDate.now().minusDays(15));
 		assertEquals("Fallo el EqualsObject",true,prueba1.equals(prueba1));
@@ -109,8 +109,8 @@ public class PrestamoImplTest {
 	@Test
 	public void testCompareTo() {
 		//fail("Not yet implemented");
-		PrestamoImpl prueba = new PrestamoImpl(15, 16,"flipa");
-		PrestamoImpl prueba1 = new PrestamoImpl(14, 16,"flipa");
+		PrestamoImpl prueba = new PrestamoImpl(15, 16);
+		PrestamoImpl prueba1 = new PrestamoImpl(14, 16);
 		
 		prueba.setDiaDelPrestamo(LocalDate.now().minusDays(22));
 		//prueba.setDiaDevolucion(LocalDate.now().minusDays(15));
@@ -143,20 +143,20 @@ public class PrestamoImplTest {
 	@Test
 	public void testToString() {
 		//fail("Not yet implemented");
-		PrestamoImpl prueba = new PrestamoImpl(15, 16,"flipa");
+		PrestamoImpl prueba = new PrestamoImpl(15, 16);
 		prueba.setDiaDelPrestamo(LocalDate.now().minusDays(22));
 		prueba.setDiaDevolucion(LocalDate.now().minusDays(15));
-		String testeando = "("+prueba.getCodigoUsuario()+","+prueba.getCodigoDocumento()+","+prueba.getEspecialidad()+","+prueba.getDiaDelPrestamo()+","+prueba.getDiaDevolucion()+","+prueba.getDiasEnPrestamo()+")";
+		String testeando = "("+prueba.getCodigoUsuario()+","+prueba.getCodigoDocumento()+","+prueba.getDiaDelPrestamo()+","+prueba.getDiaDevolucion()+","+prueba.getDiasEnPrestamo()+")";
 		assertEquals("No funciono el toString",testeando,prueba.toString());
 	}
 
 	@Test
 	public void testMostrar() {
 		//fail("Not yet implemented");
-		PrestamoImpl prueba = new PrestamoImpl(15, 16,"flipa");
+		PrestamoImpl prueba = new PrestamoImpl(15, 16);
 		prueba.setDiaDelPrestamo(LocalDate.now().minusDays(22));
 		prueba.setDiaDevolucion(LocalDate.now().minusDays(15));
-		String testeando = "Codigo del Alumno: "+prueba.getCodigoUsuario()+"\nCodigo del documento: "+prueba.getCodigoDocumento()+"\nEspecialidad Documento: "+prueba.getEspecialidad()+"\nDia inicio del prestamo: "
+		String testeando = "Codigo del Alumno: "+prueba.getCodigoUsuario()+"\nCodigo del documento: "+prueba.getCodigoDocumento()+"\nDia inicio del prestamo: "
 				 +prueba.getDiaDelPrestamo()+"\nDia de la devolucion: "+prueba.getDiaDevolucion()+"\nDias prestado: "+prueba.getDiasEnPrestamo();
 		assertEquals("No funciono el mostrar",testeando,prueba.mostrar());
 	}

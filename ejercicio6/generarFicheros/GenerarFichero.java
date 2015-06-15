@@ -44,16 +44,16 @@ public class GenerarFichero {
 		auxL.crearFicheroBinario(Constantes.LIBROS);
 		auxL.escribirMultiplesRegistroBinario(auxLib, Constantes.LIBROS);
 		
-/*1*/	auxPres.add(new PrestamoImpl(1, 3,"Culto Romano"));
-		auxPres.add(new PrestamoImpl(2, 2, "Culto Romano"));
-		auxPres.add(new PrestamoImpl(10, 10, "Cartomagia"));
-		auxPres.add(new PrestamoImpl(9, 10, "Cartomagia"));
-/*5*/	auxPres.add(new PrestamoImpl(8, 10, "Cartomagia"));
-		auxPres.add(new PrestamoImpl(7, 8, "Calculo Estructural"));
-		auxPres.add(new PrestamoImpl(5, 5, "Cirugia nuevas tecnicas"));
-		auxPres.add(new PrestamoImpl(4, 6, "Cirugia general"));
-		auxPres.add(new PrestamoImpl(3, 1, "Culto Romano"));
-/*10*/	auxPres.add(new PrestamoImpl(5, 6, "Cirugia general"));
+/*1*/	auxPres.add(new PrestamoImpl(1, 3));
+		auxPres.add(new PrestamoImpl(2, 2));
+		auxPres.add(new PrestamoImpl(10, 10));
+		auxPres.add(new PrestamoImpl(9, 10));
+/*5*/	auxPres.add(new PrestamoImpl(8, 10));
+		auxPres.add(new PrestamoImpl(7, 8));
+		auxPres.add(new PrestamoImpl(5, 5));
+		auxPres.add(new PrestamoImpl(4, 6));
+		auxPres.add(new PrestamoImpl(3, 1));
+/*10*/	auxPres.add(new PrestamoImpl(5, 6));
 //convirtiendolos en prestamos completados
 		auxPres.get(0).setDiaDelPrestamo(LocalDate.now().minusMonths(2));
 		auxPres.get(0).setDiaDevolucion(LocalDate.now().minusDays(58));
@@ -82,16 +82,16 @@ public class GenerarFichero {
 		auxP.escribirMultiplesRegistroBinario(auxPres, Constantes.PRESTAMOHISTORICO);
 		auxPres.clear();
 		
-/*1*/	auxPres.add(new PrestamoImpl(1, 3,"Culto Romano"));
-		auxPres.add(new PrestamoImpl(2, 2, "Culto Romano"));
-		auxPres.add(new PrestamoImpl(10, 10, "Cartomagia"));
-		auxPres.add(new PrestamoImpl(9, 10, "Cartomagia"));
-/*5*/	auxPres.add(new PrestamoImpl(8, 10, "Cartomagia"));
-		auxPres.add(new PrestamoImpl(7, 9, "Calculo Estructural"));
-		auxPres.add(new PrestamoImpl(5, 5, "Cirugia nuevas tecnicas"));
-		auxPres.add(new PrestamoImpl(4, 6, "Cirugia general"));
-		auxPres.add(new PrestamoImpl(3, 1, "Culto Romano"));
-/*10*/	auxPres.add(new PrestamoImpl(5, 6, "Cirugia general"));
+/*1*/	auxPres.add(new PrestamoImpl(1, 3));
+		auxPres.add(new PrestamoImpl(2, 2));
+		auxPres.add(new PrestamoImpl(10, 10));
+		auxPres.add(new PrestamoImpl(9, 10));
+/*5*/	auxPres.add(new PrestamoImpl(8, 10));
+		auxPres.add(new PrestamoImpl(7, 9));
+		auxPres.add(new PrestamoImpl(5, 5));
+		auxPres.add(new PrestamoImpl(4, 6));
+		auxPres.add(new PrestamoImpl(3, 1));
+/*10*/	auxPres.add(new PrestamoImpl(5, 6));
 		
 		auxPres.get(0).setDiaDelPrestamo(LocalDate.now().minusDays(5));
 		auxPres.get(1).setDiaDelPrestamo(LocalDate.now().minusDays(3));

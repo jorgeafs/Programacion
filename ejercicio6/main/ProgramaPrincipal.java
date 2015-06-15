@@ -51,7 +51,12 @@ public class ProgramaPrincipal {
 		//Mostrar Menu
 			do{
 				mostrarMenu();
-				opcion = leer.nextInt();
+				opcion = 0;
+				try {
+					opcion = leer.nextInt();
+				} catch (InputMismatchException  e) {
+					leer.nextLine();
+				}
 			}while(opcion<1 || opcion>5);
 		//Segun Opcion
 			switch (opcion) {
@@ -59,41 +64,63 @@ public class ProgramaPrincipal {
 		//Realizar/Devolver Prestamo
 			case 1:
 				contador=0;
+				prestamo.clear();
 				do{
-				System.out.println("Por favor identifiquese, introduzca su nombre");
-				leer.nextLine();
-				nombre = leer.nextLine();
-				System.out.println("Por favor introduzca su primer apellido");
-				apellido1=leer.nextLine();
-				System.out.println("Por favor introduzca su segundo apellido");
-				apellido2=leer.nextLine();
-				codigoAlu=new GestionPrestamos<AlumnoImpl>().identificarAlumno(nombre, apellido1, apellido2, Constantes.ALUMNOS);
-				contador++;
-				if(codigoAlu == -1 && contador<2){
-					System.out.println("\nTiene "+(3-contador)+" oportunidad/es ó volvera al menu principal");
-				} else if (contador==2) {
-					System.out.println("\nEs su ultima oportunidad ó volvera al menu principal");
-				}
+					nombre = null;
+					apellido1 = null;
+					apellido2 = null;
+					try {
+						System.out.println("Por favor identifiquese, introduzca su nombre");
+						leer.nextLine();
+						nombre = leer.nextLine();
+						System.out.println("Por favor introduzca su primer apellido");
+						apellido1=leer.nextLine();
+						System.out.println("Por favor introduzca su segundo apellido");
+						apellido2=leer.nextLine();
+					} catch (InputMismatchException  e) {
+							leer.nextLine();
+					}
+					codigoAlu=new GestionPrestamos<AlumnoImpl>().identificarAlumno(nombre, apellido1, apellido2, Constantes.ALUMNOS);
+					contador++;
+					if(codigoAlu == -1 && contador<2){
+						System.out.println("\nTiene "+(3-contador)+" oportunidad/es ó volvera al menu principal");
+					} else if (contador==2) {
+						System.out.println("\nEs su ultima oportunidad ó volvera al menu principal");
+					}
 				}while(codigoAlu == -1 && contador<3); //codigoAlu distinto de -1 o contador mayor que 3
 				if(codigoAlu!=-1) {
 				do{
 					mostrarSubmenu();
 					//System.out.println("Esta utilidad todavia no esta implementada");
-					submenu = leer.nextInt();
+					submenu = 0;
+					try {
+						submenu = leer.nextInt();
+					} catch (InputMismatchException  e) {
+						leer.nextLine();
+					}
 				}while(submenu<1||submenu>3);
 				switch(submenu) {
 				case 1:
-					prestamo.clear();
 					do {
 						do {
 							menuPrestamo();
-							menuPrestar = leer.nextInt();
+							menuPrestar = 0;
+							try {
+								menuPrestar = leer.nextInt();
+							} catch (InputMismatchException  e) {
+								leer.nextLine();
+							}
 						} while (menuPrestar<1 || menuPrestar>2);
 						if(menuPrestar ==1) {
 
 							new GestionPrestamos<>().listarLibrosDisponibles(Constantes.LIBROS);
 							System.out.println("\nIntroduzca el codigo del libro");
-							codigoLib=leer.nextInt();
+							codigoLib = 0;
+							try {
+								codigoLib=leer.nextInt();
+							} catch (InputMismatchException  e) {
+								leer.nextLine();
+							}
 							//especialidad =  new GestionPrestamos<String>().obtenerEspecialidad(codigoLib);
 							apoyo = new PrestamoImpl(codigoAlu,codigoLib);
 							prestamo.add(apoyo);
@@ -108,13 +135,23 @@ public class ProgramaPrincipal {
 					do {
 						do {
 							menuDevolucion();
-							menuPrestar = leer.nextInt();
+							menuPrestar = 0;
+							try {
+								menuPrestar = leer.nextInt();
+							} catch (InputMismatchException  e) {
+								leer.nextLine();
+							}
 						} while (menuPrestar<1 || menuPrestar>2);
 						if(menuPrestar ==1) {
 
 							if(new GestionPrestamos<>().listarLibrosADevolver(codigoAlu, Constantes.LIBROS)){
 							System.out.println("\nIntroduzca el codigo del libro");
-							codigoLib=leer.nextInt();
+							codigoLib = 0;
+							try {
+								codigoLib=leer.nextInt();
+							} catch (InputMismatchException  e) {
+								leer.nextLine();
+							}
 							//System.out.println("Introduzca la especialidad del libro");
 							//leer.nextLine();
 							//especialidad =  leer.nextLine();
@@ -138,26 +175,42 @@ public class ProgramaPrincipal {
 		//Mostrar libro mas prestado
 			case 2:
 				apoyoL = auxL.libroMasPrestado();
-				for (LibroImpl aux : apoyoL) {
-					System.out.println(aux.toString()+"\n");
+				if (apoyoL != null) {
+					System.out.println("\nEl/los libro/S mas consultado/s es/son:\n");
+					for (LibroImpl aux : apoyoL) {
+						System.out.println(aux.toString()+"\n");
+					}
+				} else {
+					System.out.println("No hay datos para la consulta");
 				}
+				apoyoL.clear();
 				break;
 		//Opcion 3
 		//Mostrar especialidad mas consultada
 			case 3:
 				apoyoS = auxS.especialidadMasConsultada();
-				System.out.println("\nAhora muestro la/s especialidad mas consultada/s\n");
-				for (String string : apoyoS) {
-					System.out.println(string+"\n");
+				System.out.println("\nAhora se muestra/n la/s especialidad mas consultada/s\n");
+				if(apoyoS != null) {
+					for (String string : apoyoS) {
+						System.out.println(string+"\n");
+					}
+				} else {
+					System.out.println("No hay datos para la consulta");
 				}
+				apoyoS.clear();
 				break;
 		//Opcion 4
 		//Mostrar Alumnos pendientes de Devolucion
 			case 4:
 				apoyoA = auxA.alumnosDevPendientes(Constantes.ALUMNOS);
-				for(AlumnoImpl aux : apoyoA) {
-					System.out.println(aux.toString()+"\n");
+				if(!apoyoA.isEmpty()) {
+					for(AlumnoImpl aux : apoyoA) {
+						System.out.println(aux.toString()+"\n");
+					}
+				} else {
+					System.out.println("No hay alumnos con prestamos pendientes");
 				}
+				apoyoA.clear();
 				break;
 		//Fin segun
 			}
